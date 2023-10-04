@@ -1,0 +1,1581 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>6. Linear algebra in R &#8212; Numerical methods for EC140</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/myfile.css" />
+    <link rel="stylesheet" type="text/css" href="_static/.ipynb_checkpoints/myfile-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch6Matrices';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="7. Numerical integration in R" href="ch7Integrals.html" />
+    <link rel="prev" title="5. Plotting bivariate functions in R" href="ch5R3Dplotting.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="ch1Rbasics.html">1. Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch2RPlotting.html">2. 2D Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch3Functions.html">3. Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch4Loops.html">4. Loops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch5R3Dplotting.html">5. 3D Plotting</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">6. Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch7Integrals.html">7. Integrals</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eekostadinov/EC140" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eekostadinov/EC140/issues/new?title=Issue%20on%20page%20%2Fch6Matrices.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/ch6Matrices.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Linear algebra in R</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-a-matrix">6.1. Defining a matrix</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arranging-the-elements-of-the-vector-into-a-matrix-by-rows">6.1.1. Arranging the elements of the vector into a matrix by rows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">6.1.2. Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-column-and-row-vectors">6.1.3. Defining column and row vectors.</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-matrices">6.2. Working with matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-the-order-of-a-matrix">6.2.1. Checking the order of a matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transpose-of-a-matrix">6.2.2. Transpose of a matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-addition">6.2.3. Matrix addition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalar-multiplication-of-matrices">6.2.4. Scalar multiplication of matrices.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-multiplication">6.2.5. Matrix multiplication</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#another-example">6.2.5.1. Another example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrices-and-systems-of-linear-equations">6.3. Matrices and systems of linear equations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determinant-of-a-matrix">6.3.1. Determinant of a matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-systems-of-linear-equations">6.3.2. (Optional) Systems of linear equations</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inverse-of-a-matrix">6.3.2.1. Inverse of a matrix</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-solving-systems-of-linear-equations">6.3.3. (Optional) Solving systems of linear equations</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-algebra-in-r">
+<span id="chapter-matrices"></span><h1><span class="section-number">6. </span>Linear algebra in R<a class="headerlink" href="#linear-algebra-in-r" title="Permalink to this heading">#</a></h1>
+<p>This chapter is a quick guide to working with matrices in R. Following the discussion you should be able to define and conduct basic operations with matrices.</p>
+<p>The best way to work through the chapter is to read the discussion and then reproduce all code in your own R/RStudio installation. You can do this by copying code from a notebook cell to your R script and run the code line by line.</p>
+<p>The chapter includes some exercises that allow you to test your understanding. It is recommended that you try these exercises on your own before choosing the option to reveal the solutions.</p>
+<section id="defining-a-matrix">
+<h2><span class="section-number">6.1. </span>Defining a matrix<a class="headerlink" href="#defining-a-matrix" title="Permalink to this heading">#</a></h2>
+<p>To define a matrix use the <code class="docutils literal notranslate"><span class="pre">matrix()</span></code> function with usage</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="n">a2</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">an</span><span class="p">),</span> <span class="n">nrow</span><span class="o">=</span><span class="n">number</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="n">number</span><span class="p">,</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which takes a vector of <span class="math notranslate nohighlight">\(n\)</span> elements, <code class="docutils literal notranslate"><span class="pre">c(a1,a2,...,an)</span></code> and rearranges it into a <code class="docutils literal notranslate"><span class="pre">nrow</span></code><span class="math notranslate nohighlight">\(\times\)</span><code class="docutils literal notranslate"><span class="pre">ncol</span></code> matrix. By default the elements of the vector are arranged into the matrix so that the first <code class="docutils literal notranslate"><span class="pre">nrow</span></code> elements comprise the first column of the matrix, the next <code class="docutils literal notranslate"><span class="pre">nrow</span></code> elements comprise the second column of the matrix, and so forth.</p>
+<p>For example, to define the <span class="math notranslate nohighlight">\(3\times3\)</span> matrix</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A= \begin{bmatrix}
+1 &amp; 2 &amp; 3 \\
+4 &amp; 5 &amp; 6 \\
+7 &amp; 8 &amp; 9 
+\end{bmatrix} 
+\end{split}\]</div>
+<p>type</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+<span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3]
+[1,] 1    2    3   
+[2,] 4    5    6   
+[3,] 7    8    9   
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The number of rows and columns specified should be consistent with the number of elements (i.e. the number of elements of the vector <code class="docutils literal notranslate"><span class="pre">c(a1,a2,...,an)</span></code> should be exactly equal to <code class="docutils literal notranslate"><span class="pre">nrow</span></code><span class="math notranslate nohighlight">\(\times\)</span><code class="docutils literal notranslate"><span class="pre">ncol</span></code>). Otherwise, R will return an error.</p>
+<p>For example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">&lt;-</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>yields the error message</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">Warning</span> <span class="n">message</span><span class="p">:</span>
+<span class="n">In</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">nrow</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="p">:</span>
+  <span class="n">data</span> <span class="n">length</span> <span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">sub</span><span class="o">-</span><span class="n">multiple</span> <span class="ow">or</span> <span class="n">multiple</span> <span class="n">of</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">rows</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>because the number of elements given is 9, while we are trying to place them inside a <span class="math notranslate nohighlight">\(2\times3\)</span> matrix.</p>
+</div>
+<p>In fact, given the vector of elements, <code class="docutils literal notranslate"><span class="pre">c(a1,a2,...,an)</span></code>, it is sufficient</p>
+<ul class="simple">
+<li><p>to only supply either the number of rows, <code class="docutils literal notranslate"><span class="pre">nrow</span></code>, (in which case the number of columns will be automatically deduced as equal to <code class="docutils literal notranslate"><span class="pre">length(c(a1,a2,...,an))/nrow</span></code>)</p></li>
+<li><p>or to only supply the number of columns, <code class="docutils literal notranslate"><span class="pre">ncol</span></code>, (in which case the number of rows will be automatically deduced as equal to <code class="docutils literal notranslate"><span class="pre">length(c(a1,a2,...,an))/ncol</span></code>)</p></li>
+</ul>
+<p>For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+<span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3]
+[1,] 1    2    3   
+[2,] 4    5    6   
+[3,] 7    8    9   
+</pre></div>
+</div>
+</div>
+</div>
+<p>or</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+<span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3]
+[1,] 1    2    3   
+[2,] 4    5    6   
+[3,] 7    8    9   
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Again, the number of rows or columns specified should be consistent with the number of elements.</p>
+<p>For example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">&lt;-</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>yields and error message</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">Warning</span> <span class="n">message</span><span class="p">:</span>
+<span class="n">In</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">nrow</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="p">:</span>
+  <span class="n">data</span> <span class="n">length</span> <span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">sub</span><span class="o">-</span><span class="n">multiple</span> <span class="ow">or</span> <span class="n">multiple</span> <span class="n">of</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">rows</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>as the number of elements in <code class="docutils literal notranslate"><span class="pre">c(1,</span> <span class="pre">4,</span> <span class="pre">7,</span> <span class="pre">2,</span> <span class="pre">5,</span> <span class="pre">8,</span> <span class="pre">3,</span> <span class="pre">6,</span> <span class="pre">9)</span></code> is not divisible by 4.</p>
+</div>
+<section id="arranging-the-elements-of-the-vector-into-a-matrix-by-rows">
+<h3><span class="section-number">6.1.1. </span>Arranging the elements of the vector into a matrix by rows<a class="headerlink" href="#arranging-the-elements-of-the-vector-into-a-matrix-by-rows" title="Permalink to this heading">#</a></h3>
+<p>As seen above, by default, the elements of the vector passed to <code class="docutils literal notranslate"><span class="pre">matrix()</span></code> are arranged into a matrix column-wise. However, it may be more convenient for writing to arrange the elements row-wise. To do so use the optional argument <code class="docutils literal notranslate"><span class="pre">byrow=TRUE</span></code>. For example, the same matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> as above can be equivalently defined by</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">## More convenient for writing</span>
+
+<span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3]
+[1,] 1    2    3   
+[2,] 4    5    6   
+[3,] 7    8    9   
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is often more convenient for inputting matrices because we can input our code on several lines to make us quickly visualize what matrix we are inputting. For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span>
+<span class="w">              </span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span>
+<span class="w">              </span><span class="m">7</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3]
+[1,] 1    2    3   
+[2,] 4    5    6   
+[3,] 7    8    9   
+</pre></div>
+</div>
+</div>
+</div>
+<p>generates the same matrix but makes the code much more readable.</p>
+<p>For the purposes of readability, henceforth, this is how we will enter matrices in these notes.</p>
+<p>Now let’s continue with another example of entering a matrix.</p>
+</section>
+<section id="example">
+<h3><span class="section-number">6.1.2. </span>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
+<p>To define the <span class="math notranslate nohighlight">\(3\times2\)</span> matrix</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+B= \begin{bmatrix}
+7 &amp; 2  \\
+3 &amp; 8  \\
+1 &amp; 9  
+\end{bmatrix} 
+\end{split}\]</div>
+<p>type</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">B</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">7</span><span class="p">,</span><span class="m">2</span><span class="p">,</span>
+<span class="w">              </span><span class="m">3</span><span class="p">,</span><span class="m">8</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">B</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2]
+[1,] 7    2   
+[2,] 3    8   
+[3,] 1    9   
+</pre></div>
+</div>
+</div>
+</div>
+<div class="exercise admonition" id="ex-defmat">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.1 </span></p>
+<section id="exercise-content">
+<p>Define the matrix</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+C= \begin{bmatrix}
+7 &amp; 2 &amp; 5 &amp; 12  \\
+3 &amp; 8 &amp; 8 &amp; -3 \\
+1 &amp; 9 &amp; 7 &amp;  0 
+\end{bmatrix} 
+\end{split}\]</div>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch6Matrices-solution-1">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ex-defmat"> Exercise 6.1</a></p>
+<section id="solution-content">
+<p>This can be done with the code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span> <span class="o">&lt;-</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span>
+              <span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span>
+              <span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</div>
+</section>
+<section id="defining-column-and-row-vectors">
+<h3><span class="section-number">6.1.3. </span>Defining column and row vectors.<a class="headerlink" href="#defining-column-and-row-vectors" title="Permalink to this heading">#</a></h3>
+<p>Column and row vectors can be also specified by using the <code class="docutils literal notranslate"><span class="pre">matrix()</span></code> function, setting the number of columns and rows appropriately.</p>
+<p>For example, to define the <span class="math notranslate nohighlight">\(1\times9\)</span> vector <span class="math notranslate nohighlight">\(a= \begin{bmatrix}1,2,3,4,5,6,7,8,9\end{bmatrix}\)</span> type</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="n">a</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]
+[1,] 1    2    3    4    5    6    7    8    9   
+</pre></div>
+</div>
+</div>
+</div>
+<p>To instead define th <span class="math notranslate nohighlight">\(9\times1\)</span> vector <span class="math notranslate nohighlight">\(b= \begin{bmatrix}1\\2\\3\\4\end{bmatrix}\)</span> type</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1]
+[1,] 1   
+[2,] 2   
+[3,] 3   
+[4,] 4   
+</pre></div>
+</div>
+</div>
+</div>
+<p>A few more examples</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">4</span><span class="p">)</span>
+<span class="n">c</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3] [,4]
+[1,] 3    7    1    2   
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">d</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="n">d</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3] [,4]
+[1,] 3    7    1    2   
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="working-with-matrices">
+<h2><span class="section-number">6.2. </span>Working with matrices<a class="headerlink" href="#working-with-matrices" title="Permalink to this heading">#</a></h2>
+<section id="checking-the-order-of-a-matrix">
+<h3><span class="section-number">6.2.1. </span>Checking the order of a matrix<a class="headerlink" href="#checking-the-order-of-a-matrix" title="Permalink to this heading">#</a></h3>
+<p>Given a matrix <code class="docutils literal notranslate"><span class="pre">A</span></code>, then <code class="docutils literal notranslate"><span class="pre">dim(A)</span></code> returns the order (or dimension) of the matrix. This can be used to query the order of a given matrix.</p>
+<p>For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">B</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">7</span><span class="p">,</span><span class="m">2</span><span class="p">,</span>
+<span class="w">              </span><span class="m">3</span><span class="p">,</span><span class="m">8</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="nf">dim</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 3 2
+</pre></div>
+</div>
+</div>
+</div>
+<p>as the defined matrix <code class="docutils literal notranslate"><span class="pre">B</span></code> is of order <span class="math notranslate nohighlight">\(3\times2\)</span>.</p>
+</section>
+<section id="transpose-of-a-matrix">
+<h3><span class="section-number">6.2.2. </span>Transpose of a matrix<a class="headerlink" href="#transpose-of-a-matrix" title="Permalink to this heading">#</a></h3>
+<p>Given a matrix <code class="docutils literal notranslate"><span class="pre">A</span></code>, then <code class="docutils literal notranslate"><span class="pre">t(A)</span></code> returns the transpose of the matrix.</p>
+<p>For example, given</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span>
+<span class="w">              </span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span>
+<span class="w">              </span><span class="m">7</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3]
+[1,] 1    2    3   
+[2,] 4    5    6   
+[3,] 7    8    9   
+</pre></div>
+</div>
+</div>
+</div>
+<p>then its transpose is returned by</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">t</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3]
+[1,] 1    4    7   
+[2,] 2    5    8   
+[3,] 3    6    9   
+</pre></div>
+</div>
+</div>
+</div>
+<p>As another example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">B</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">7</span><span class="p">,</span><span class="m">2</span><span class="p">,</span>
+<span class="w">              </span><span class="m">3</span><span class="p">,</span><span class="m">8</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">B</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2]
+[1,] 7    2   
+[2,] 3    8   
+[3,] 1    9   
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">t</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3]
+[1,] 7    3    1   
+[2,] 2    8    9   
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="matrix-addition">
+<h3><span class="section-number">6.2.3. </span>Matrix addition<a class="headerlink" href="#matrix-addition" title="Permalink to this heading">#</a></h3>
+<p>Given matrices <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> <strong>of the same order</strong></p>
+<ul class="simple">
+<li><p>their sum can be found by <code class="docutils literal notranslate"><span class="pre">A+B</span></code></p></li>
+<li><p>their difference can be found by <code class="docutils literal notranslate"><span class="pre">A-B</span></code></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">7</span><span class="p">,</span><span class="m">2</span><span class="p">,</span>
+<span class="w">              </span><span class="m">3</span><span class="p">,</span><span class="m">8</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+
+<span class="n">B</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">,</span>
+<span class="w">              </span><span class="m">6</span><span class="p">,</span><span class="m">1</span><span class="p">,</span>
+<span class="w">              </span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">+</span><span class="n">B</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2]
+[1,] 8     5  
+[2,] 9     9  
+[3,] 3    12  
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">-</span><span class="n">B</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2]
+[1,]  6   -1  
+[2,] -3    7  
+[3,] -1    6  
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that if the matrices added/subtracted are not of the same order, R will return an error.</p>
+<p>For example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">&lt;-</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span>
+              <span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
+              <span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">&lt;-</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span>
+              <span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>results in the error message <code class="docutils literal notranslate"><span class="pre">Error</span> <span class="pre">in</span> <span class="pre">A</span> <span class="pre">+</span> <span class="pre">C:</span> <span class="pre">non-conformable</span> <span class="pre">arrays</span></code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Just like we can’t add matrices of different orders, a matrix cannot be added to a scalar. For example, the expression</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}1 &amp; 2\\3 &amp; 4\end{bmatrix} + 1 
+\end{split}\]</div>
+<p>is mathematically meaningless.</p>
+<p>However, in R the sum of a matrix and scalar is defined. For example, the code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">byrow</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>yields the output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="p">[,</span><span class="mi">1</span><span class="p">]</span> <span class="p">[,</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,]</span> <span class="mi">2</span>    <span class="mi">3</span>   
+<span class="p">[</span><span class="mi">2</span><span class="p">,]</span> <span class="mi">4</span>    <span class="mi">5</span>   
+</pre></div>
+</div>
+<p>so the sum of a matrix and a scalar is interpreted as the sum of the matrix with a matrix of the same order with all elements being equal to the scalar. In other words the code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">byrow</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>implements the mathematical operation</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}1 &amp; 2\\3 &amp; 4\end{bmatrix} + \begin{bmatrix}1 &amp; 1\\1 &amp; 1\end{bmatrix} 
+\end{split}\]</div>
+<p>The reason this is allowed in R is that it allows a convenient shortcut for the above operation, but you should be careful to recognise that, mathematically, this is not a sum of a scalar and a matrix (which is not defined mathematically).</p>
+</div>
+</section>
+<section id="scalar-multiplication-of-matrices">
+<h3><span class="section-number">6.2.4. </span>Scalar multiplication of matrices.<a class="headerlink" href="#scalar-multiplication-of-matrices" title="Permalink to this heading">#</a></h3>
+<p>Given a matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> and a scalar <code class="docutils literal notranslate"><span class="pre">b</span></code>, the product of <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> can be obtained as <code class="docutils literal notranslate"><span class="pre">A*b</span></code> or <code class="docutils literal notranslate"><span class="pre">b*A</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">7</span><span class="p">,</span><span class="m">2</span><span class="p">,</span>
+<span class="w">              </span><span class="m">3</span><span class="p">,</span><span class="m">8</span><span class="p">,</span>
+<span class="w">              </span><span class="m">1</span><span class="p">,</span><span class="m">9</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2]
+[1,] 7    2   
+[2,] 3    8   
+[3,] 1    9   
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">*</span><span class="m">2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2]
+[1,] 14    4  
+[2,]  6   16  
+[3,]  2   18  
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="matrix-multiplication">
+<h3><span class="section-number">6.2.5. </span>Matrix multiplication<a class="headerlink" href="#matrix-multiplication" title="Permalink to this heading">#</a></h3>
+<p>Given conformable matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>, implemented by <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>, the matrix product <span class="math notranslate nohighlight">\(A\times B\)</span> is obtained in R by <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">%*%</span> <span class="pre">B</span></code>.</p>
+<p>Note that the multiplication sign should be enclosed in <code class="docutils literal notranslate"><span class="pre">%</span></code> signs for R to recognise that what we want is a matrix product.</p>
+<p>For example, consider the matrices</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A_{2\times2}=\begin{bmatrix}1&amp;2\\3&amp;4\end{bmatrix} \text{ and } B_{2\times1}=\begin{bmatrix}1\\2\end{bmatrix} 
+\end{split}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span>
+<span class="w">              </span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">B</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span>
+<span class="w">              </span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then <span class="math notranslate nohighlight">\(A\times B\)</span> exists and can be found in R by typing</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">%*%</span><span class="n">B</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1]
+[1,]  5  
+[2,] 11  
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is mathematically correct because, indeed, you can easily verify that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}1&amp;2\\3&amp;4\end{bmatrix}\times \begin{bmatrix}1\\2\end{bmatrix}= \begin{bmatrix}5\\11\end{bmatrix}
+\end{split}\]</div>
+<p>On the other hand, given <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> above, the matrix product <span class="math notranslate nohighlight">\(B\times A\)</span> does not exist because the number of columns of <span class="math notranslate nohighlight">\(B\)</span> is different from the number of rows of <span class="math notranslate nohighlight">\(A\)</span>. If we type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">B</span><span class="o">%*%</span><span class="n">A</span>
+</pre></div>
+</div>
+<p>we unsurprisingly get the error message <code class="docutils literal notranslate"><span class="pre">Error</span> <span class="pre">in</span> <span class="pre">B</span> <span class="pre">%*%</span> <span class="pre">A:</span> <span class="pre">non-conformable</span> <span class="pre">arrays</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In R you should be extra careful to use <code class="docutils literal notranslate"><span class="pre">%*%</span></code> rather than <code class="docutils literal notranslate"><span class="pre">*</span></code> for matrix multiplication because</p>
+<ul class="simple">
+<li><p>the operator <code class="docutils literal notranslate"><span class="pre">%*%</span></code> correctly implements matrix multiplication</p></li>
+<li><p>while the operator <code class="docutils literal notranslate"><span class="pre">*</span></code> is also defined for matrices but implements <strong>pointwise multiplication</strong> which is a useful operation but distinct from matrix multiplication.</p></li>
+</ul>
+<p>For example consider the matrices <span class="math notranslate nohighlight">\(A=\begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(B=\begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}\)</span>, which can be defined in R by the code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">=</span><span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">B</span><span class="o">=</span><span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Mathematically, the matrix product <span class="math notranslate nohighlight">\(A\times B\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A\times B = \begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}\times\begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}=\begin{bmatrix}1\times1 + 1\times1&amp; 1\times1 + 1\times1\\ 1\times1 + 1\times1 &amp;1\times1 + 1\times1\end{bmatrix}=\begin{bmatrix}2&amp;2\\2&amp;2\end{bmatrix}
+\end{split}\]</div>
+<p>We can conduct this operation consistently in R by typing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">%*%</span> <span class="n">B</span>
+</pre></div>
+</div>
+<p>yielding the output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="p">[,</span><span class="mi">1</span><span class="p">]</span> <span class="p">[,</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,]</span> <span class="mi">2</span>    <span class="mi">2</span>   
+<span class="p">[</span><span class="mi">2</span><span class="p">,]</span> <span class="mi">2</span>    <span class="mi">2</span>   
+</pre></div>
+</div>
+<p>On the other hand, the pointwise multiple of two matrices of the same order is defined as a matrix of the same order where each element is obtained as the product of the corresponding elements of the two original matrices. For example, if we have <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> defined as above, their pointwise multiple is the matrix</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}1\times1&amp;1\times1\\1\times1&amp;1\times1\end{bmatrix}=\begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}
+\end{split}\]</div>
+<p>In R the operator <code class="docutils literal notranslate"><span class="pre">*</span></code> implements pointwise multiplication. So given <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> above, typing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">*</span> <span class="n">B</span>
+</pre></div>
+</div>
+<p>yields the output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="p">[,</span><span class="mi">1</span><span class="p">]</span> <span class="p">[,</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,]</span> <span class="mi">1</span>    <span class="mi">1</span>   
+<span class="p">[</span><span class="mi">2</span><span class="p">,]</span> <span class="mi">1</span>    <span class="mi">1</span>   
+</pre></div>
+</div>
+<p>You should be extra careful to use the correct operator <code class="docutils literal notranslate"><span class="pre">%*%</span></code> for matrix multiplication!</p>
+</div>
+<section id="another-example">
+<h4><span class="section-number">6.2.5.1. </span>Another example<a class="headerlink" href="#another-example" title="Permalink to this heading">#</a></h4>
+<p>Consider the matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> defined below</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">13</span><span class="p">,</span><span class="m">23</span><span class="p">,</span><span class="m">32</span><span class="p">,</span><span class="m">78</span><span class="p">,</span>
+<span class="w">              </span><span class="m">24</span><span class="p">,</span><span class="m">15</span><span class="p">,</span><span class="m">76</span><span class="p">,</span><span class="m">15</span><span class="p">,</span>
+<span class="w">              </span><span class="m">76</span><span class="p">,</span><span class="m">88</span><span class="p">,</span><span class="m">19</span><span class="p">,</span><span class="m">34</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+
+<span class="n">B</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">17</span><span class="p">,</span><span class="m">65</span><span class="p">,</span><span class="m">72</span><span class="p">,</span>
+<span class="w">              </span><span class="m">42</span><span class="p">,</span><span class="m">56</span><span class="p">,</span><span class="m">12</span><span class="p">,</span>
+<span class="w">              </span><span class="m">81</span><span class="p">,</span><span class="m">0</span><span class="w"> </span><span class="p">,</span><span class="m">13</span><span class="p">,</span>
+<span class="w">              </span><span class="m">21</span><span class="p">,</span><span class="m">18</span><span class="p">,</span><span class="m">35</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Their product <span class="math notranslate nohighlight">\(A\times B\)</span> is cumbersome to calculate by hand but can be easily found using R</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">%*%</span><span class="n">B</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2]  [,3]
+[1,] 5417  3537 4358
+[2,] 7509  2670 3421
+[3,] 7241 10480 7965
+</pre></div>
+</div>
+</div>
+</div>
+<p>By <strong>correctly</strong> using R we can easily calculate arbitrarily complex arithmetic expressions involving matrices.</p>
+<p>For example, given</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix} 1&amp;5&amp;7\\2&amp;-3&amp;-5\\5&amp;-9&amp;1 \end{bmatrix} \text{ and } B = \begin{bmatrix} 4&amp;1&amp;8\\-2&amp;6&amp;-12\\2&amp;13&amp;0 \end{bmatrix}
+\end{split}\]</div>
+<p>we can easily calculate something like</p>
+<div class="math notranslate nohighlight">
+\[
+(A\times B)^T + (B\times A) - A 
+\]</div>
+<p>by simply typing</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">7</span><span class="p">,</span>
+<span class="w">             </span><span class="m">2</span><span class="p">,</span><span class="m">-3</span><span class="p">,</span><span class="m">-5</span><span class="p">,</span>
+<span class="w">             </span><span class="m">5</span><span class="p">,</span><span class="m">-9</span><span class="p">,</span><span class="m">1</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+
+<span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">4</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">8</span><span class="p">,</span>
+<span class="w">             </span><span class="m">-2</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">-12</span><span class="p">,</span>
+<span class="w">             </span><span class="m">2</span><span class="p">,</span><span class="m">13</span><span class="p">,</span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+
+<span class="nf">t</span><span class="p">(</span><span class="n">A</span><span class="o">%*%</span><span class="n">B</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">B</span><span class="o">%*%</span><span class="n">A</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2] [,3]
+[1,]  53  -56   64 
+[2,]  70    2  -87 
+[3,] -29   32   96 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="exercise admonition" id="ex-matoper">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.2 </span></p>
+<section id="exercise-content">
+<p>Consider the matrices</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix} 1&amp;5&amp;8\\2&amp;-3&amp;-5\end{bmatrix} \text{ and } B = \begin{bmatrix} 4&amp;1&amp;8\\-2&amp;6&amp;-12\\2&amp;13&amp;0 \end{bmatrix}
+\end{split}\]</div>
+<p>Use R to evaluate</p>
+<div class="math notranslate nohighlight">
+\[
+(A\times B)^T + B\times A^T - A^T
+\]</div>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch6Matrices-solution-3">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ex-matoper"> Exercise 6.2</a></p>
+<section id="solution-content">
+<p>The following code evaluates the expression</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
+             <span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+
+<span class="n">B</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
+             <span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="o">-</span><span class="mi">12</span><span class="p">,</span>
+             <span class="mi">2</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+
+<span class="n">t</span><span class="p">(</span><span class="n">A</span><span class="o">%*%</span><span class="n">B</span><span class="p">)</span> <span class="o">+</span> <span class="n">B</span><span class="o">%*%</span><span class="n">t</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">-</span> <span class="n">t</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</div>
+</section>
+</section>
+</section>
+<section id="matrices-and-systems-of-linear-equations">
+<h2><span class="section-number">6.3. </span>Matrices and systems of linear equations<a class="headerlink" href="#matrices-and-systems-of-linear-equations" title="Permalink to this heading">#</a></h2>
+<section id="determinant-of-a-matrix">
+<h3><span class="section-number">6.3.1. </span>Determinant of a matrix<a class="headerlink" href="#determinant-of-a-matrix" title="Permalink to this heading">#</a></h3>
+<p>A determinant of a matrix can be calculated in R using the <code class="docutils literal notranslate"><span class="pre">det()</span></code> function.</p>
+<p>Given a square matrix <span class="math notranslate nohighlight">\(A\)</span>, its determinant is found by typing <code class="docutils literal notranslate"><span class="pre">det(A)</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span>
+<span class="w">              </span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="nf">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] -2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">B</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">17</span><span class="p">,</span><span class="m">65</span><span class="p">,</span><span class="m">72</span><span class="p">,</span>
+<span class="w">              </span><span class="m">42</span><span class="p">,</span><span class="m">56</span><span class="p">,</span><span class="m">12</span><span class="p">,</span>
+<span class="w">              </span><span class="m">81</span><span class="p">,</span><span class="m">0</span><span class="w"> </span><span class="p">,</span><span class="m">13</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="nf">det</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] -286526
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that a determinant of a matrix is mathematically defined only for square matrices, and this is also the case computationally. For example, the code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span> <span class="o">&lt;-</span> <span class="n">matrix</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span>
+              <span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span>
+              <span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">byrow</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+<span class="n">det</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>returns the error <code class="docutils literal notranslate"><span class="pre">Error</span> <span class="pre">in</span> <span class="pre">determinant.matrix(x,</span> <span class="pre">logarithm</span> <span class="pre">=</span> <span class="pre">TRUE,</span> <span class="pre">...):</span> <span class="pre">'x'</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">a</span> <span class="pre">square</span> <span class="pre">matrix</span></code> because the matrix <code class="docutils literal notranslate"><span class="pre">C</span></code> is not square matrix and has no determinant.</p>
+</section>
+<section id="optional-systems-of-linear-equations">
+<h3><span class="section-number">6.3.2. </span>(Optional) Systems of linear equations<a class="headerlink" href="#optional-systems-of-linear-equations" title="Permalink to this heading">#</a></h3>
+<p>Consider a system of <span class="math notranslate nohighlight">\(n\)</span> linear equations in <span class="math notranslate nohighlight">\(n\)</span> unknowns written in matrix form as</p>
+<div class="math notranslate nohighlight">
+\[
+Ax=b
+\]</div>
+<p>where</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A\)</span> is an <span class="math notranslate nohighlight">\(n\times n\)</span> matrix of coefficients</p></li>
+<li><p><span class="math notranslate nohighlight">\(x\)</span> is an <span class="math notranslate nohighlight">\(n\times1\)</span> vector of unknowns</p></li>
+<li><p><span class="math notranslate nohighlight">\(b\)</span> is an <span class="math notranslate nohighlight">\(n\times1\)</span> vector of coefficients</p></li>
+</ul>
+<p>Suppose that <span class="math notranslate nohighlight">\(det(A)\neq0\)</span> so the system has a unique solution.</p>
+<p>In the lectures we have seen one method (<em>Cramer’s rule</em>) of obtaining the solution to the system by using matrix algebra.</p>
+<p>Another well known method, which we have not discussed in the lecture, is one based on the notion of an <strong>inverse of a function</strong>. While implementing this method by hand is much more cumbersome than Cramer’s rule, it is very easy to implement computationally. In what follows we define the notion of an inverse and explain how to use it to solve arbitrarily complex systems of linear equations computationally.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mathematical material in this section goes beyond the core material for the module. Do not worry if you find the discussion difficult to follow, and feel free to omit it if this is the case.</p>
+</div>
+<section id="inverse-of-a-matrix">
+<h4><span class="section-number">6.3.2.1. </span>Inverse of a matrix<a class="headerlink" href="#inverse-of-a-matrix" title="Permalink to this heading">#</a></h4>
+<p>First some mathematics.</p>
+<div class="hint admonition">
+<p class="admonition-title">(Definition) Identity matrix</p>
+<p>An <strong>identity matrix</strong> of order <span class="math notranslate nohighlight">\(n\times n\)</span>, commonly denoted <span class="math notranslate nohighlight">\(I_{n\times n}\)</span>, is a square matrix of order <span class="math notranslate nohighlight">\(n\times n\)</span> with all diagonal elements equal to 1 and all off-diagonal elements equal to zero.</p>
+</div>
+<p>For example,</p>
+<ul class="simple">
+<li><p>the <span class="math notranslate nohighlight">\(2\times2\)</span> identity matrix is</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+I_{2\times2}=\begin{bmatrix}1&amp;0\\0&amp;1 \end{bmatrix}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>the <span class="math notranslate nohighlight">\(3\times3\)</span> identity matrix is</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+I_{3\times3}=\begin{bmatrix}1&amp;0&amp;0\\0&amp;1&amp;0\\0&amp;0&amp;1 \end{bmatrix}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>and so forth.</p></li>
+</ul>
+<div class="hint admonition">
+<p class="admonition-title">Property of identity matrix</p>
+<p>Given a <strong>square</strong> matrix <span class="math notranslate nohighlight">\(A_{n\times n}\)</span> or order <span class="math notranslate nohighlight">\(n\times n\)</span>, and the identity matrix <span class="math notranslate nohighlight">\(I_{n\times n}\)</span> or order <span class="math notranslate nohighlight">\(n\times n\)</span> then</p>
+<div class="math notranslate nohighlight">
+\[
+A_{n\times n}\times I_{n\times n} = I_{n\times n}\times A_{n\times n} = A_{n\times n}  
+\]</div>
+<p>In words, multiplying a square matrix <span class="math notranslate nohighlight">\(A\)</span> by the identity matrix of the same order always yields the original matrix <span class="math notranslate nohighlight">\(A\)</span>. You can think that in the context of matrix multiplication the identity matrix has the same property as the number 1 has in the context of multiplying numbers.</p>
+<p>Similarly, given an <span class="math notranslate nohighlight">\(n\times1\)</span> column vector <span class="math notranslate nohighlight">\(a_{n\times1}\)</span>, and the identity matrix <span class="math notranslate nohighlight">\(I_{n\times n}\)</span> or order <span class="math notranslate nohighlight">\(n\times n\)</span> then</p>
+<div class="math notranslate nohighlight">
+\[
+I_{n\times n}\times a_{n\times 1} = a_{n\times n}  
+\]</div>
+<p>In words, multiplying a vector <span class="math notranslate nohighlight">\(a\)</span> by the comformable identity matrix always yields the original vector <span class="math notranslate nohighlight">\(a\)</span>. Again, you can think that in the context of matrix multiplication the identity matrix has the same property as the number 1 has in the context of multiplying numbers.</p>
+</div>
+<p>For example, it is easy to verify that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}1&amp;0\\0&amp;1 \end{bmatrix} \times \begin{bmatrix}7&amp;3\\1&amp;2 \end{bmatrix} = \begin{bmatrix}7&amp;3\\1&amp;2 \end{bmatrix}\times \begin{bmatrix}1&amp;0\\0&amp;1 \end{bmatrix} = \begin{bmatrix}7&amp;3\\1&amp;2 \end{bmatrix}
+\end{split}\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}1&amp;0&amp;0\\0&amp;1&amp;0\\0&amp;0&amp;1 \end{bmatrix} \times \begin{bmatrix}5&amp;4&amp;2\\-3&amp;2&amp;7\\0&amp;-1&amp;4 \end{bmatrix} = \begin{bmatrix}5&amp;4&amp;2\\-3&amp;2&amp;7\\0&amp;-1&amp;4 \end{bmatrix} \times \begin{bmatrix}1&amp;0&amp;0\\0&amp;1&amp;0\\0&amp;0&amp;1 \end{bmatrix} =
+\begin{bmatrix}5&amp;4&amp;2\\-3&amp;2&amp;7\\0&amp;-1&amp;4 \end{bmatrix}
+\end{split}\]</div>
+<p>and so forth.</p>
+<div class="hint admonition">
+<p class="admonition-title">(Definition) Inverse of a matrix</p>
+<p>Given a <strong>square</strong> matrix <span class="math notranslate nohighlight">\(A\)</span> or order <span class="math notranslate nohighlight">\(n\times n\)</span>, the <strong>inverse matrix</strong> of <span class="math notranslate nohighlight">\(A\)</span> is another <span class="math notranslate nohighlight">\(n\times n\)</span> matrix, commonly denoted by <span class="math notranslate nohighlight">\(A^{-1}\)</span>, such that</p>
+<div class="math notranslate nohighlight">
+\[
+A^{-1}\times A = A\times A^{-1} = I_{n\times n} 
+\]</div>
+<p>In words, the product of a matrix and its inverse is the identity matrix.</p>
+</div>
+<p>For example, we can easily verify that the inverse of the matrix <span class="math notranslate nohighlight">\(A=\begin{bmatrix}1&amp;2\\3&amp;4 \end{bmatrix} \)</span> is the matrix <span class="math notranslate nohighlight">\(A^{-1}=\begin{bmatrix}-2&amp;1\\1.5&amp;-0.5 \end{bmatrix} \)</span> because</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}-2&amp;1\\1.5&amp;-0.5 \end{bmatrix} \times \begin{bmatrix}1&amp;2\\3&amp;4 \end{bmatrix}= \begin{bmatrix}1&amp;2\\3&amp;4 \end{bmatrix}\times \begin{bmatrix}-2&amp;1\\1.5&amp;-0.5 \end{bmatrix} = \begin{bmatrix}1&amp;0\\0&amp;1 \end{bmatrix}
+\end{split}\]</div>
+<div class="hint admonition">
+<p class="admonition-title">Inverses and determinants</p>
+<p>For reasons beyond the scope of this discussion, it turns out that a square matrix <span class="math notranslate nohighlight">\(A\)</span> has an inverse if and only if <span class="math notranslate nohighlight">\(det(A)\neq0\)</span>.</p>
+</div>
+<p>Now back to R. While there are procedures for obtaining the inverse of a matrix by hand, these are typically quite cumbersome for matrices of order higher than <span class="math notranslate nohighlight">\(2\times2\)</span>. On the other hand, they are very easy to find computationally. In R, the inverse of a matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> can be found by <code class="docutils literal notranslate"><span class="pre">solve(A)</span></code>.  For example, given the matrix <span class="math notranslate nohighlight">\(A\)</span> above</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span>
+<span class="w">              </span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">solve</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1] [,2]
+[1,] -2.0  1.0
+[2,]  1.5 -0.5
+</pre></div>
+</div>
+</div>
+</div>
+<p>But also for much more complicated matrices</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">B</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">13</span><span class="p">,</span><span class="m">23</span><span class="p">,</span><span class="m">32</span><span class="p">,</span><span class="m">72</span><span class="p">,</span><span class="m">15</span><span class="p">,</span>
+<span class="w">              </span><span class="m">24</span><span class="p">,</span><span class="m">15</span><span class="p">,</span><span class="m">76</span><span class="p">,</span><span class="m">81</span><span class="p">,</span><span class="m">13</span><span class="p">,</span>
+<span class="w">              </span><span class="m">76</span><span class="p">,</span><span class="m">88</span><span class="p">,</span><span class="m">19</span><span class="p">,</span><span class="m">93</span><span class="p">,</span><span class="m">18</span><span class="p">,</span>
+<span class="w">              </span><span class="m">27</span><span class="p">,</span><span class="m">94</span><span class="p">,</span><span class="m">62</span><span class="p">,</span><span class="m">73</span><span class="p">,</span><span class="m">27</span><span class="p">,</span>
+<span class="w">              </span><span class="m">12</span><span class="p">,</span><span class="m">22</span><span class="p">,</span><span class="m">31</span><span class="p">,</span><span class="m">62</span><span class="p">,</span><span class="m">18</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="nf">solve</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1]        [,2]         [,3]          [,4]         [,5]       
+[1,] -0.06555317  0.015105056  0.0169165843 -0.013068083  0.04640397
+[2,]  0.03326893 -0.008685351 -0.0016609482  0.015518808 -0.04306862
+[3,] -0.01924799  0.018045231 -0.0043228707  0.006412682 -0.00228883
+[4,]  0.05705412 -0.005707990 -0.0008036537 -0.003578446 -0.03725134
+[5,] -0.16033034 -0.010871654  0.0009654094 -0.008973683  0.20951104
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="optional-solving-systems-of-linear-equations">
+<h3><span class="section-number">6.3.3. </span>(Optional) Solving systems of linear equations<a class="headerlink" href="#optional-solving-systems-of-linear-equations" title="Permalink to this heading">#</a></h3>
+<div class="tip admonition">
+<p class="admonition-title">Solving systems of equations using inverse matrices</p>
+<p>Consider again a general system of <span class="math notranslate nohighlight">\(n\)</span> linear equations in <span class="math notranslate nohighlight">\(n\)</span> unknowns written in matrix form as</p>
+<div class="math notranslate nohighlight">
+\[
+Ax=b
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(det(A)\neq0\)</span>.</p>
+<p>Since <span class="math notranslate nohighlight">\(det(A)\neq0\)</span>, then the inverse of <span class="math notranslate nohighlight">\(A\)</span>, say <span class="math notranslate nohighlight">\(A^{-1}\)</span> exists.</p>
+<p>Now, pre-multiply both sides of the matrix equation by <span class="math notranslate nohighlight">\(A^{-1}\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+A^{-1}Ax=A^{-1}b
+\]</div>
+<p>Note that by the definition of an inverse of a matrix, <span class="math notranslate nohighlight">\(A^{-1}A=I\)</span> so we have</p>
+<div class="math notranslate nohighlight">
+\[
+Ix=A^{-1}b
+\]</div>
+<p>Further, by the proprerty of identity matrices <span class="math notranslate nohighlight">\(Ix = x\)</span>  so we have</p>
+<div class="math notranslate nohighlight">
+\[
+x=A^{-1}b
+\]</div>
+<p>In other words, given the system of linear equations in matrix form <span class="math notranslate nohighlight">\(Ax=b\)</span>, the solution can be found simply as</p>
+<div class="math notranslate nohighlight">
+\[
+x=A^{-1}b
+\]</div>
+<p>This allows a very simple method to computationally solve the system.</p>
+</div>
+<p>For example, consider the system of equations <span class="math notranslate nohighlight">\(Ax=b\)</span> where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}1&amp;2\\3&amp;4\end{bmatrix},\quad x = \begin{bmatrix}x_1\\x_2\end{bmatrix}, \quad b = \begin{bmatrix}3\\7\end{bmatrix}
+\end{split}\]</div>
+<p>To obtain the solution for <span class="math notranslate nohighlight">\(x = \begin{bmatrix}x_1\\x_2\end{bmatrix}\)</span> in R simply type</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span>
+<span class="w">              </span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span>
+<span class="w">              </span><span class="m">7</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+
+<span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">%*%</span><span class="n">b</span>
+<span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1]
+[1,] 1   
+[2,] 1   
+</pre></div>
+</div>
+</div>
+</div>
+<p>So the solution to the system is simply <span class="math notranslate nohighlight">\(x = \begin{bmatrix}1\\1\end{bmatrix}\)</span></p>
+<p>Of course, the usefulness of using numerical methods is especially relevant when we have more difficult systems.</p>
+<p>For example, consider the system  <span class="math notranslate nohighlight">\(Ax=b\)</span> where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}
+              13&amp;23&amp;32&amp;72&amp;15\\
+              24&amp;15&amp;76&amp;81&amp;13\\
+              76&amp;88&amp;19&amp;93&amp;18\\
+              27&amp;94&amp;62&amp;73&amp;27\\
+              12&amp;22&amp;31&amp;62&amp;18
+              \end{bmatrix},\quad 
+              x = \begin{bmatrix}
+                  x_1\\
+                  x_2\\
+                  x_3\\
+                  x_4\\
+                  x_5
+                  \end{bmatrix}, \quad b = \begin{bmatrix}
+                  12\\
+                  31\\
+                  91\\
+                  17\\
+                  12
+                  \end{bmatrix}
+\end{split}\]</div>
+<p>which is extremely cumbersome to solve by hand.</p>
+<p>First define the matrices in R and note that the determinant of <span class="math notranslate nohighlight">\(A\)</span> is not zero, so <span class="math notranslate nohighlight">\(A\)</span> is invertible.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">13</span><span class="p">,</span><span class="m">23</span><span class="p">,</span><span class="m">32</span><span class="p">,</span><span class="m">72</span><span class="p">,</span><span class="m">15</span><span class="p">,</span>
+<span class="w">              </span><span class="m">24</span><span class="p">,</span><span class="m">15</span><span class="p">,</span><span class="m">76</span><span class="p">,</span><span class="m">81</span><span class="p">,</span><span class="m">13</span><span class="p">,</span>
+<span class="w">              </span><span class="m">76</span><span class="p">,</span><span class="m">88</span><span class="p">,</span><span class="m">19</span><span class="p">,</span><span class="m">93</span><span class="p">,</span><span class="m">18</span><span class="p">,</span>
+<span class="w">              </span><span class="m">27</span><span class="p">,</span><span class="m">94</span><span class="p">,</span><span class="m">62</span><span class="p">,</span><span class="m">73</span><span class="p">,</span><span class="m">27</span><span class="p">,</span>
+<span class="w">              </span><span class="m">12</span><span class="p">,</span><span class="m">22</span><span class="p">,</span><span class="m">31</span><span class="p">,</span><span class="m">62</span><span class="p">,</span><span class="m">18</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">byrow</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">12</span><span class="p">,</span>
+<span class="w">              </span><span class="m">31</span><span class="p">,</span>
+<span class="w">              </span><span class="m">91</span><span class="p">,</span>
+<span class="w">              </span><span class="m">17</span><span class="p">,</span>
+<span class="w">              </span><span class="m">12</span><span class="p">),</span><span class="w"> </span><span class="n">ncol</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+
+<span class="nf">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] -64782877
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next simply construct the solution as the product of the inverse of <span class="math notranslate nohighlight">\(A\)</span> times <span class="math notranslate nohighlight">\(b\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x_sol</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">%*%</span><span class="n">b</span>
+<span class="n">x_sol</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     [,1]       
+[1,]  1.55571816
+[2,] -0.27416868
+[3,]  0.01659472
+[4,] -0.07328040
+[5,]  0.18844674
+</pre></div>
+</div>
+</div>
+</div>
+<p>So the solution of the system is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+x=\begin{bmatrix}
+                  x_1\\
+                  x_2\\
+                  x_3\\
+                  x_4\\
+                  x_5
+\end{bmatrix} =
+\begin{bmatrix}
+                  1.556\\
+                  -0.274\\
+                  0.017\\
+                  -0.073\\
+                  0.188
+\end{bmatrix}
+\end{split}\]</div>
+<p>In this simple way we can solve arbitrarily complex systems of linear equations.</p>
+<p>This completes the discussion of <a class="reference internal" href="#chapter-matrices"><span class="std std-ref">Linear algebra in R</span></a>. We next turn attention to numerical integration in R.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ch5R3Dplotting.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>Plotting bivariate functions in R</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ch7Integrals.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">7. </span>Numerical integration in R</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-a-matrix">6.1. Defining a matrix</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arranging-the-elements-of-the-vector-into-a-matrix-by-rows">6.1.1. Arranging the elements of the vector into a matrix by rows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">6.1.2. Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-column-and-row-vectors">6.1.3. Defining column and row vectors.</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-matrices">6.2. Working with matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-the-order-of-a-matrix">6.2.1. Checking the order of a matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transpose-of-a-matrix">6.2.2. Transpose of a matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-addition">6.2.3. Matrix addition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalar-multiplication-of-matrices">6.2.4. Scalar multiplication of matrices.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-multiplication">6.2.5. Matrix multiplication</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#another-example">6.2.5.1. Another example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrices-and-systems-of-linear-equations">6.3. Matrices and systems of linear equations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determinant-of-a-matrix">6.3.1. Determinant of a matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-systems-of-linear-equations">6.3.2. (Optional) Systems of linear equations</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inverse-of-a-matrix">6.3.2.1. Inverse of a matrix</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-solving-systems-of-linear-equations">6.3.3. (Optional) Solving systems of linear equations</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Emil Kostadinov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

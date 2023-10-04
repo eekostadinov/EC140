@@ -1,0 +1,866 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>3. Writing your own functions in R &#8212; Numerical methods for EC140</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/myfile.css" />
+    <link rel="stylesheet" type="text/css" href="_static/.ipynb_checkpoints/myfile-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch3Functions';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Loops in R" href="ch4Loops.html" />
+    <link rel="prev" title="2. Plotting in R" href="ch2RPlotting.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="ch1Rbasics.html">1. Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch2RPlotting.html">2. 2D Plotting</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">3. Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch4Loops.html">4. Loops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch5R3Dplotting.html">5. 3D Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch6Matrices.html">6. Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch7Integrals.html">7. Integrals</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eekostadinov/EC140" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eekostadinov/EC140/issues/new?title=Issue%20on%20page%20%2Fch3Functions.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/ch3Functions.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Writing your own functions in R</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-a-custom-function">3.1. Defining a custom function</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">3.1.1. Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-functions-of-several-variables">3.1.2. A note on functions of several variables.</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-a-note-on-global-and-local-variables">3.2. (Optional) A note on global and local variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-variables">3.2.1. Global variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-variables">3.2.2. Local variables</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-r-functions-inside-plot">3.3. Using R functions inside <code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="writing-your-own-functions-in-r">
+<span id="chapter-functions"></span><h1><span class="section-number">3. </span>Writing your own functions in R<a class="headerlink" href="#writing-your-own-functions-in-r" title="Permalink to this heading">#</a></h1>
+<p>This chapter is a quick guide to user-defined <em>functions</em> in R, with emphasis on the implementation of mathematical functions. Following this chapter you will be able to use R to write pieces of code which implement mathematical functions such as the ones studied in the module.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The concept of a <strong>function</strong> has distinct (although related) meanings in the contexts of mathematics and programming.</p>
+<p>In the lectures we have defined a mathematical function, <span class="math notranslate nohighlight">\(f\)</span>, as a rule which takes as an input a variable quantity, <span class="math notranslate nohighlight">\(x\)</span> (the <em>argument</em> of the function), and for each value of <span class="math notranslate nohighlight">\(x\)</span>, returns <strong>one and only one</strong> value, <span class="math notranslate nohighlight">\(f(x)\)</span>, as output.</p>
+<p>In programming, a function is a piece of computer program, which also takes some input, transforms it in a specified way, and produces some output. While intended as an implementation of the abstract mathematical concept of function, a function defined in a program may not be a mathematical function (for example, it may not necessarily map a value of the arguments to a unique value). However, we can write programming functions which implement mathematical functions and this is the context in which we will use programming functions in this course.</p>
+</div>
+<p>The best way to work through the chapter is to read the discussion and then reproduce all code in your own R/RStudio installation. You can do this by copying code from a notebook cell to your R script and run the code line by line.</p>
+<p>The chapter includes some exercises that allow you to test your understanding. It is recommended that you try these exercises on your own before choosing the option to reveal the solutions.</p>
+<section id="defining-a-custom-function">
+<h2><span class="section-number">3.1. </span>Defining a custom function<a class="headerlink" href="#defining-a-custom-function" title="Permalink to this heading">#</a></h2>
+<p>Suppose that you want to define a function</p>
+<ul class="simple">
+<li><p>called <code class="docutils literal notranslate"><span class="pre">some_function</span></code></p></li>
+<li><p>which takes as arguments some values, <code class="docutils literal notranslate"><span class="pre">arg1</span></code>, <code class="docutils literal notranslate"><span class="pre">arg2</span></code>,…, <code class="docutils literal notranslate"><span class="pre">argN</span></code></p></li>
+<li><p>makes some calculation based on the values of the arguments (as well as values stored in <em>variables</em> prior to the call of the function)</p></li>
+<li><p>and returns some output, <code class="docutils literal notranslate"><span class="pre">output</span></code></p></li>
+</ul>
+<p>The way to define this function in R is through the following code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>some_function &lt;- function(`arg1`, `arg2`,...,`argN`) {
+  
+  (optional) some code involving statements using {`arg1`, `arg2`, ..., `argN`} that define `output` 
+  
+  return(`output`)
+}
+</pre></div>
+</div>
+<p>Once the function is defined, a call <code class="docutils literal notranslate"><span class="pre">some_function(ARG1,</span> <span class="pre">ARG2,</span> <span class="pre">...,</span> <span class="pre">ARGN)</span></code> where <code class="docutils literal notranslate"><span class="pre">ARG1</span></code>, …, <code class="docutils literal notranslate"><span class="pre">ARGN</span></code> are specific values of the arguments, will return the value of the output when these specific values are used as arguments.</p>
+<section id="example">
+<h3><span class="section-number">3.1.1. </span>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
+<p>Suppose that we want to write an R function which implements the mathematical function</p>
+<div class="math notranslate nohighlight">
+\[
+    f(x)=x^3-12x+3
+\]</div>
+<p>To do so we define an R function</p>
+<ul class="simple">
+<li><p>called <code class="docutils literal notranslate"><span class="pre">f</span></code></p></li>
+<li><p>which takes as argument a value <code class="docutils literal notranslate"><span class="pre">x</span></code></p></li>
+<li><p>and returns the value of the expression <code class="docutils literal notranslate"><span class="pre">x^3-12*x+3</span></code></p></li>
+</ul>
+<p>To do so type</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nf">return</span><span class="p">(</span><span class="n">x</span><span class="o">^</span><span class="m">3-12</span><span class="o">*</span><span class="n">x</span><span class="m">+3</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once the function is defined we can evaluate the function at any specific value of the argument, say <code class="docutils literal notranslate"><span class="pre">4</span></code>, by typing <code class="docutils literal notranslate"><span class="pre">f(4)</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">f</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">19</div></div>
+</div>
+<p>This makes sense because given <span class="math notranslate nohighlight">\(f(x)=x^3-12x+3\)</span>, it is true that <span class="math notranslate nohighlight">\(f(4)=19\)</span>. So the <em>programming</em> function <code class="docutils literal notranslate"><span class="pre">f</span></code> above, is an implementation of the mathematical function <span class="math notranslate nohighlight">\(f(x)=x^3-12x+3\)</span>.</p>
+<p>Given this we can use our function to easily evaluate complex expressions involving the function. For example, given <span class="math notranslate nohighlight">\(f(x)=x^3-12x+3\)</span> we can easily find the value of</p>
+<div class="math notranslate nohighlight">
+\[
+    \frac{f(5)-f(3)}{f(4)}
+\]</div>
+<p>by simply typing</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nf">f</span><span class="p">(</span><span class="m">5</span><span class="p">)</span><span class="o">-</span><span class="nf">f</span><span class="p">(</span><span class="m">3</span><span class="p">))</span><span class="o">/</span><span class="nf">f</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">3.89473684210526</div></div>
+</div>
+<p>Note that we could have defined a function implementing <span class="math notranslate nohighlight">\(f(x)=x^3-12x+3\)</span> in more complicated ways as well, as long as we correctly follow the syntax rules. For example, the function <code class="docutils literal notranslate"><span class="pre">f1</span></code> below uses a different code but results in the same rule.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="m">3-12</span><span class="o">*</span><span class="n">x</span><span class="m">+3</span>
+<span class="w">    </span><span class="nf">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nf">f1</span><span class="p">(</span><span class="m">5</span><span class="p">)</span><span class="o">-</span><span class="nf">f1</span><span class="p">(</span><span class="m">3</span><span class="p">))</span><span class="o">/</span><span class="nf">f1</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">3.89473684210526</div></div>
+</div>
+<p>An even more complicated implementation of the same mathematical function is the function <code class="docutils literal notranslate"><span class="pre">f2</span></code> below</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">term1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span>
+<span class="w">    </span><span class="n">term2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-12</span><span class="o">*</span><span class="n">x</span>
+<span class="w">    </span><span class="n">term3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
+<span class="w">    </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">term1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">term2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">term3</span>
+<span class="w">    </span><span class="nf">return</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nf">f2</span><span class="p">(</span><span class="m">5</span><span class="p">)</span><span class="o">-</span><span class="nf">f2</span><span class="p">(</span><span class="m">3</span><span class="p">))</span><span class="o">/</span><span class="nf">f2</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">3.89473684210526</div></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The purpose of this discussion is not to suggest using more complicated code for defining simple functions but simply to show how user-defined functions in R work.</p>
+</div>
+<div class="exercise admonition" id="ex-function">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.1 </span></p>
+<section id="exercise-content">
+<p>Write an R function called <code class="docutils literal notranslate"><span class="pre">g</span></code> which implements the mathematical function</p>
+<div class="math notranslate nohighlight">
+\[
+    g(x)=3x^2-2x+1
+\]</div>
+<p>Then evaluate the expression</p>
+<div class="math notranslate nohighlight">
+\[
+    \frac{g(2)-g(3)}{g(1)}
+\]</div>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch3Functions-solution-1">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ex-function"> Exercise 3.1</a></p>
+<section id="solution-content">
+<p>One code that implements the function is the following</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">&lt;-</span> <span class="n">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">return</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>                         <span class="c1"># Define the function</span>
+
+
+<span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="n">g</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">/</span><span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>          <span class="c1"># Evaluate the expression</span>
+</pre></div>
+</div>
+</section>
+</div>
+</section>
+<section id="a-note-on-functions-of-several-variables">
+<h3><span class="section-number">3.1.2. </span>A note on functions of several variables.<a class="headerlink" href="#a-note-on-functions-of-several-variables" title="Permalink to this heading">#</a></h3>
+<p>While we have not yet studied multivariate functions in the module (coming soon) we can easily implement a mathematical function of several variables in R by using the exact same syntax rules. For example, a simple function of three variables is the function <span class="math notranslate nohighlight">\(h(x,y,z)=x+y-z\)</span> - a rule which takes the values of three arguments (<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span>) and returns a number equal to <span class="math notranslate nohighlight">\(x+y-z\)</span>. For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">h</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nf">return</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="o">-</span><span class="n">z</span><span class="p">)</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then we can evaluate <span class="math notranslate nohighlight">\(h(x=1,y=2,z=3)=1+2-3=0\)</span> simply by typing</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">h</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">0</div></div>
+</div>
+</section>
+</section>
+<section id="optional-a-note-on-global-and-local-variables">
+<h2><span class="section-number">3.2. </span>(Optional) A note on global and local variables<a class="headerlink" href="#optional-a-note-on-global-and-local-variables" title="Permalink to this heading">#</a></h2>
+<p>In the context of programming there is an important distinction between two types of variables - <strong>global variables</strong> and <strong>local variables</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The distinction between local and global variables is a relatively advanced idea and not directly relevant to the context of these notes as supplementing a mathematics course. For this reason, don’t worry if at this stage you have difficulties in understanding the discussion.</p>
+<p>However, the distinction is fundamental to programming and occurs in every programming language. Since you are likely to use R for the duration of your degree, understanding the programming concepts of local and global variables can be very helpful later on.</p>
+</div>
+<section id="global-variables">
+<h3><span class="section-number">3.2.1. </span>Global variables<a class="headerlink" href="#global-variables" title="Permalink to this heading">#</a></h3>
+<p>Informally, within a program (think within the execution of an R script), a global variable is one that, once defined, can be called from any part of the program. If you use RStudio, you can see a list of all global variables defined within the code that you have executed in the Environment window. Whenever you define a variable within your program outside of a function, you have defined a global variable which can then be used as a named store of value in any subsequent part of the code, including functions.</p>
+<p>For example, if you run the following code within the main body of your RStudio script (or from the R console)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">newvar</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="c1"># defines a new global variable</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>you define a new global variable, called <code class="docutils literal notranslate"><span class="pre">newvar</span></code> with value 5. You will notice that the variable <code class="docutils literal notranslate"><span class="pre">newvar</span></code> with value <code class="docutils literal notranslate"><span class="pre">5</span></code> appears in the Environment window of your RStudio.</p>
+<p>Since the variable is global it can then be called in any subsequent part of the code. For example, if you later type</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">newvar</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">5</div></div>
+</div>
+<p>the output is the value of the variable, 5. Similarly if you define a new variable <code class="docutils literal notranslate"><span class="pre">newvar2</span></code> based on <code class="docutils literal notranslate"><span class="pre">newvar</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">newvar2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">newvar</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span>
+<span class="n">newvar2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">6</div></div>
+</div>
+<p>you would have created a new variable <code class="docutils literal notranslate"><span class="pre">newvar2</span></code> whose value will equal the value of <code class="docutils literal notranslate"><span class="pre">newvar</span></code> + 1.</p>
+<p>Similarly if you use a global variable inside a function (e.g. the function <code class="docutils literal notranslate"><span class="pre">newfun</span></code> below which takes a number and returns the sum of this number and <code class="docutils literal notranslate"><span class="pre">newvar</span></code>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">newfun</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="nf">return</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">newvar</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and call the function with argument <code class="docutils literal notranslate"><span class="pre">2</span></code>, the output will be</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">newfun</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">7</div></div>
+</div>
+<p>equal to 2 + 5.</p>
+</section>
+<section id="local-variables">
+<h3><span class="section-number">3.2.2. </span>Local variables<a class="headerlink" href="#local-variables" title="Permalink to this heading">#</a></h3>
+<p>On the other hand, local variables are ones that exist temporarily in the memory of your computer, only for the duration of the execution of a part of the code. When a new variable is defined within a function it can be called from further code within the same function, but after the execution of the function will no longer exist in the computer memory.</p>
+<p>For example, consider the function <code class="docutils literal notranslate"><span class="pre">f2</span></code> defined above (reproduced below for clarity).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">term1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span>
+<span class="w">    </span><span class="n">term2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-12</span><span class="o">*</span><span class="n">x</span>
+<span class="w">    </span><span class="n">term3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">3</span>
+<span class="w">    </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">term1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">term2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">term3</span>
+<span class="w">    </span><span class="nf">return</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Within the body of the function, we define four new variables: <code class="docutils literal notranslate"><span class="pre">term1</span></code>, <code class="docutils literal notranslate"><span class="pre">term2</span></code>, <code class="docutils literal notranslate"><span class="pre">term3</span></code>, and <code class="docutils literal notranslate"><span class="pre">out</span></code>. All of these variables are important for the running of the function as its output (the expression inside <code class="docutils literal notranslate"><span class="pre">return()</span></code>) depends on them. However, these variables are local to the function - they only exist temporarily in your computer memory during the execution of the function.</p>
+<p>For example, if following the definition and execution of the function, we type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">term1</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">object</span> <span class="s1">&#39;term1&#39;</span> <span class="ow">not</span> <span class="n">found</span>
+</pre></div>
+</div>
+<p>we get an error message telling us that the “object” <code class="docutils literal notranslate"><span class="pre">term1</span></code> does not exist. Indeed, it does not - it only exists briefly during the execution of the function. You can also verify that a variable <code class="docutils literal notranslate"><span class="pre">term1</span></code> does not exist in your environment (no such variable appears in your RStudio Environment window).</p>
+<p>In programming local variables are useful because they make your code use computer memory less intensely, and this could have a significant impact on speed and performance with more complicated pieces of code. At this stage, however, we are not focusing on writing efficient code so most of the above discussion is only intended as an important side note.</p>
+</section>
+</section>
+<section id="using-r-functions-inside-plot">
+<h2><span class="section-number">3.3. </span>Using R functions inside <code class="docutils literal notranslate"><span class="pre">plot()</span></code><a class="headerlink" href="#using-r-functions-inside-plot" title="Permalink to this heading">#</a></h2>
+<p>As already discussed in <a class="reference internal" href="ch2RPlotting.html#chapter-plotting"><span class="std std-ref">Plotting in R</span></a> the standard way of plotting the graph of a function of R is by specifying vectors of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> coordinates and then calling <code class="docutils literal notranslate"><span class="pre">plot(x,y,type=&quot;l&quot;)</span></code>.</p>
+<p>For example, the graph of <span class="math notranslate nohighlight">\(f(x)=x^3-12x+3\)</span> above for <span class="math notranslate nohighlight">\(x\in[-3,3]\)</span> can be plotted by using the following code:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-3</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">0.25</span><span class="p">)</span>
+<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="m">3-12</span><span class="o">*</span><span class="n">x</span><span class="m">+3</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">type</span><span class="o">=</span><span class="s">&quot;l&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/490492de51fe7e796e877d6b5c85755ddaef42e1c376e40b4f307d5295dbad4f.png" src="_images/490492de51fe7e796e877d6b5c85755ddaef42e1c376e40b4f307d5295dbad4f.png" />
+</div>
+</div>
+<p>Once we have defined a function <code class="docutils literal notranslate"><span class="pre">f</span></code> which implements <span class="math notranslate nohighlight">\(f(x)\)</span> above, one think we can do is use the function <code class="docutils literal notranslate"><span class="pre">f</span></code> to construct the correct <span class="math notranslate nohighlight">\(y\)</span> coordinates after constructing the <span class="math notranslate nohighlight">\(x\)</span> coordinates. In R when a function of one variable is called with a vector, the associated output is a vector of the same length with each element obtained as the value of the function evaluated at the corresponding element of the first vector. Therefore, the following code produces an identical plot to the above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-3</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">0.25</span><span class="p">)</span>
+<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">type</span><span class="o">=</span><span class="s">&quot;l&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/490492de51fe7e796e877d6b5c85755ddaef42e1c376e40b4f307d5295dbad4f.png" src="_images/490492de51fe7e796e877d6b5c85755ddaef42e1c376e40b4f307d5295dbad4f.png" />
+</div>
+</div>
+<p>However, even more conveniently, the function <code class="docutils literal notranslate"><span class="pre">plot()</span></code> can be called directly with a user defined function without specifying a vector of <span class="math notranslate nohighlight">\(x\)</span>-coordinates, but only setting the domain for the plot (by using the <code class="docutils literal notranslate"><span class="pre">from</span></code> and <code class="docutils literal notranslate"><span class="pre">to</span></code> optional arguments). For example, once we have defined the <strong>function</strong> <code class="docutils literal notranslate"><span class="pre">f</span></code>, the graph of the function over <span class="math notranslate nohighlight">\(x\in[-3,3]\)</span> can be constructed with the following simplified code:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="o">=</span><span class="m">-3</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/35de608f69df99f213942f461cf0ac3487f38ba8a34397ed36ff5d2ad65dc3ef.png" src="_images/35de608f69df99f213942f461cf0ac3487f38ba8a34397ed36ff5d2ad65dc3ef.png" />
+</div>
+</div>
+<p>The graph can be further customized in the same way as discussed in <a class="reference internal" href="ch2RPlotting.html#content-plots-customization"><span class="std std-ref">Customizing the look of a simple graph</span></a>.</p>
+<p>For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="o">=</span><span class="m">-3</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="o">=</span><span class="m">3</span><span class="p">,</span>
+<span class="w">    </span><span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">frame</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+
+<span class="nf">points</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">)),</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">)</span>
+
+<span class="nf">text</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Local minimum&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">text</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="m">-2</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Local maximum&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f19f0acecccef769c2a76e260f38cbbb2ca0f102d205827a5af65ee111338229.png" src="_images/f19f0acecccef769c2a76e260f38cbbb2ca0f102d205827a5af65ee111338229.png" />
+</div>
+</div>
+<p>This completes the discussion of <a class="reference internal" href="#chapter-functions"><span class="std std-ref">Writing your own functions in R</span></a>. We next turn attention to applications of loops to evaluating geometric series.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ch2RPlotting.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Plotting in R</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ch4Loops.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>Loops in R</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-a-custom-function">3.1. Defining a custom function</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">3.1.1. Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-functions-of-several-variables">3.1.2. A note on functions of several variables.</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-a-note-on-global-and-local-variables">3.2. (Optional) A note on global and local variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-variables">3.2.1. Global variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-variables">3.2.2. Local variables</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-r-functions-inside-plot">3.3. Using R functions inside <code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Emil Kostadinov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

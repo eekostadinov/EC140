@@ -1,0 +1,996 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>7. Numerical integration in R &#8212; Numerical methods for EC140</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/myfile.css" />
+    <link rel="stylesheet" type="text/css" href="_static/.ipynb_checkpoints/myfile-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch7Integrals';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="6. Linear algebra in R" href="ch6Matrices.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="ch1Rbasics.html">1. Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch2RPlotting.html">2. 2D Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch3Functions.html">3. Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch4Loops.html">4. Loops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch5R3Dplotting.html">5. 3D Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ch6Matrices.html">6. Matrices</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">7. Integrals</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eekostadinov/EC140" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eekostadinov/EC140/issues/new?title=Issue%20on%20page%20%2Fch7Integrals.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/ch7Integrals.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Numerical integration in R</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-integration-primer">7.1. Numerical integration - primer</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-numerical-integration">7.1.1. What is numerical integration?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-numerical-integration-work">7.1.2. How does numerical integration work?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-integration-in-r-from-first-principles">7.2. Numerical integration in R from first principles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-integration-in-r-using-integrate">7.3. Numerical integration in R using <code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="numerical-integration-in-r">
+<span id="chapter-integrals"></span><h1><span class="section-number">7. </span>Numerical integration in R<a class="headerlink" href="#numerical-integration-in-r" title="Permalink to this heading">#</a></h1>
+<p>This chapter is a quick guide to numerical integration in R. Following the discussion you should understand how numerical integration works and be able to use R to compute numerically definite integrals of univariate functions.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The discussion builds upon the material from chapters <a class="reference internal" href="ch2RPlotting.html#chapter-plotting"><span class="std std-ref">Plotting in R</span></a> and <a class="reference internal" href="ch3Functions.html#chapter-functions"><span class="std std-ref">Writing your own functions in R</span></a> and assumes that you are able to work with user defined functions in R.</p>
+</div>
+<p>The best way to work through the chapter is to read the discussion and then reproduce all code in your own R/RStudio installation. You can do this by copying code from a notebook cell to your R script and run the code line by line.</p>
+<p>The chapter includes some exercises that allow you to test your understanding. It is recommended that you try these exercises on your own before choosing the option to reveal the solutions.</p>
+<section id="numerical-integration-primer">
+<h2><span class="section-number">7.1. </span>Numerical integration - primer<a class="headerlink" href="#numerical-integration-primer" title="Permalink to this heading">#</a></h2>
+<p>Consider a function of one variable, <span class="math notranslate nohighlight">\(f(x)\)</span>, and its definite integral from <span class="math notranslate nohighlight">\(a\)</span> to <span class="math notranslate nohighlight">\(b\)</span> denoted</p>
+<div class="math notranslate nohighlight" id="equation-def-int">
+<span class="eqno">(7.1)<a class="headerlink" href="#equation-def-int" title="Permalink to this equation">#</a></span>\[\int_{a}^{b} f(x) dx\]</div>
+<p>which corresponds geometrically to the signed area between the graph of of the function and the horizontal axis.</p>
+<section id="what-is-numerical-integration">
+<h3><span class="section-number">7.1.1. </span>What is numerical integration?<a class="headerlink" href="#what-is-numerical-integration" title="Permalink to this heading">#</a></h3>
+<p>We have seen that the analytical approach to evaluating <a class="reference internal" href="#equation-def-int">(7.1)</a> is to find an anti-derivative of <span class="math notranslate nohighlight">\(f\)</span>, say <span class="math notranslate nohighlight">\(F\)</span>, and then evaluate the integral as</p>
+<div class="math notranslate nohighlight">
+\[\int_{a}^{b} f(x) dx = F(b) - F(a)\]</div>
+<p>By using the analytical approach we can find the exact value of  <a class="reference internal" href="#equation-def-int">(7.1)</a>.</p>
+<p>On the other hand numerical integration is the use of computational techniques for <strong>approximately</strong> evaluating <a class="reference internal" href="#equation-def-int">(7.1)</a> without needing to find anti-derivatives. Numerical integration is especially useful when we have to integrate functions who do not have closed-form anti-derivatives (or if we don’t know the anti-derivative), but also in many cases where we are satisfied by using an approximate solution.</p>
+</section>
+<section id="how-does-numerical-integration-work">
+<h3><span class="section-number">7.1.2. </span>How does numerical integration work?<a class="headerlink" href="#how-does-numerical-integration-work" title="Permalink to this heading">#</a></h3>
+<p>We have seen in the lectures, that formally the definite integral</p>
+<div class="math notranslate nohighlight">
+\[\int_{a}^{b} f(x) dx\]</div>
+<p>can be defined as the limit of the sum of the areas of rectangles fitted <em>“just under”</em> (or <em>“just over”</em>) the graph of the function between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> when the number of these rectangles converges to infinity (or equivalently when the <em>width</em> of a rectangle converges to zero).</p>
+<p>While numerical integration can be done in many different ways, in general it involves evaluating <a class="reference internal" href="#equation-def-int">(7.1)</a> by calculating the are of rectangles fitted <em>“just under”</em> (or <em>“just over”</em>) the graph of the function between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> when the number of these rectangles is specified as a “sufficiently” large (but not infinite - computers can’t deal with infinity). The idea of numerical integration therefore draws on the formal definition of integration above, but since the number of used rectangles cannot be infinite, it leads to an approximate, rather than exact solution. However, by varying the number of rectangles fitted we can control the absolute value of the numerical error.</p>
+</section>
+</section>
+<section id="numerical-integration-in-r-from-first-principles">
+<span id="section-integrals-byhand"></span><h2><span class="section-number">7.2. </span>Numerical integration in R from first principles<a class="headerlink" href="#numerical-integration-in-r-from-first-principles" title="Permalink to this heading">#</a></h2>
+<p>While R has in-built functions for calculating definite integrals numerically to high precision (discussed in section <a class="reference internal" href="#section-integrals-integrate"><span class="std std-ref">Numerical integration in R using integrate()</span></a>), we will start by conducting numerical integration “by hand” in the sense of only by using basic R functions and numerical methods. The purpose of this section is to illustrate the idea of numerical integration and build intuition about how the result of numerical integration functions should be understood and interpreted.</p>
+<p>We will do this for a specific function, and specific limits, but the same procedure can be applied to most basic functions with known functional form and any integration limits.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following discussion includes some graphs which are produced in R. The code for producing the graphs is hidden as it is not central to the discussion, however, you can unhide it to see how to produce these graphs yourself. You should be familiar with most of the plotting functions used from the discussion in chapter <a class="reference internal" href="ch2RPlotting.html#chapter-plotting"><span class="std std-ref">Plotting in R</span></a> but the codes below also use some functionality from <code class="docutils literal notranslate"><span class="pre">graphics</span></code> not discussed before (in particular, the functions <code class="docutils literal notranslate"><span class="pre">polygon()</span></code> and <code class="docutils literal notranslate"><span class="pre">rect()</span></code>).</p>
+</div>
+<p>Consider the function</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = x^2 + 1
+\]</div>
+<p>and suppose that we want to obtain the value of</p>
+<div class="math notranslate nohighlight">
+\[
+\int_0^5 f(x) dx
+\]</div>
+<p>For context, note that this integral is easy to find analytically as follows.
+One anti-derivative of <span class="math notranslate nohighlight">\(f\)</span> is <span class="math notranslate nohighlight">\(F(x)=\frac{1}{3}x^3+x\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\int_0^5 f(x) dx = F(5)-F(0) = \left.\left[\frac{1}{3}x^3+x\right]\right|_0^5=140/3\approx46.666
+\]</div>
+<p>We can represent the value of the integral graphically as the value of the shaded area in the graph below</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">axes</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">labels</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">las</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">5</span><span class="p">))</span>
+
+<span class="n">xpol</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">0.01</span><span class="p">),</span><span class="n">b</span><span class="p">)</span>
+<span class="n">ypol</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="nf">f</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">0.01</span><span class="p">)),</span><span class="m">0</span><span class="p">)</span>
+<span class="nf">polygon</span><span class="p">(</span><span class="n">xpol</span><span class="p">,</span><span class="n">ypol</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;lightblue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="s">&quot;dashed&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/8eca294601b66dcac12298da7c3677ba09216948395db400ead7b9143d254267.png" src="_images/8eca294601b66dcac12298da7c3677ba09216948395db400ead7b9143d254267.png" />
+</div>
+</div>
+<p>Now let’s start computing this definite integral numerically.</p>
+<p>Let’s start by approximating the area under the graph of the function with the area of two rectangles of equal width just below the graph of the function, as in the graph below.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="n">number_of_rectangles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span>
+<span class="w">  </span>
+<span class="n">xgrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)</span>
+<span class="n">xs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">ys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">axes</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">at</span><span class="o">=</span><span class="n">xgrid</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">labels</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">las</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
+
+<span class="n">xlefts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">xrights</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="p">(</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)]</span>
+<span class="nf">rect</span><span class="p">(</span><span class="n">xlefts</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">xrights</span><span class="p">,</span><span class="w"> </span><span class="n">ys</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;lightblue&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/6a25fca0c6ab724fc30c2ed88db65a2e28d19d5b3bbc9ee2d7110f9b85a26701.png" src="_images/6a25fca0c6ab724fc30c2ed88db65a2e28d19d5b3bbc9ee2d7110f9b85a26701.png" />
+</div>
+</div>
+<p>You may find that in the case of two rectangles you may find it is easier to do the below calculation by hand rather than by using a computer. However, the beauty of numerical methods is that once you do the code carefully, you can easily customize it to work in situations where doing it by hand will be much less efficient. In what follows we will write the code for computing the area of the two rectangles above which will be easy to customize to use any number of rectangles.</p>
+<p>To find the area of these rectangles follow the steps below.</p>
+<ol class="arabic simple">
+<li><p>Define a function implementing <code class="docutils literal notranslate"><span class="pre">f(x)</span></code></p></li>
+<li><p>(optionally) Define variables <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> storing the values of the lower and higher limits of integration.</p></li>
+<li><p>(optionally) Define a variable, say <code class="docutils literal notranslate"><span class="pre">number_of_rectangles</span></code> storing the value of the number of rectangles used in the approximation.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="n">number_of_rectangles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Now we will need the widths and the heights of the rectangles. 
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Proceed by creating a grid, say <code class="docutils literal notranslate"><span class="pre">xgrid</span></code>, of the horizontal endpoints of the rectangles. Since they are of equal width we can use the <code class="docutils literal notranslate"><span class="pre">seq()</span></code> function. Notice that the grid will have <code class="docutils literal notranslate"><span class="pre">number_of_rectangles+1</span></code> elements (for example, in the case of two rectangles the endpoints are 0, 2.5, and 5 as seen above)</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">xgrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)</span>
+<span class="n">xgrid</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class=list-inline><li>0</li><li>2.5</li><li>5</li></ol>
+</div></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Store the width of the rectangles in a variable, say <code class="docutils literal notranslate"><span class="pre">dx</span></code>. The width of each rectangle is simply the distance between <code class="docutils literal notranslate"><span class="pre">b</span></code> and <code class="docutils literal notranslate"><span class="pre">a</span></code> divided by the number of rectangles. For example,</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">dx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">number_of_rectangles</span>
+<span class="n">dx</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">2.5</div></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>so the width of the rectangles when we use two rectangles is 2.5.
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Now we need the height of the rectangles. In general, the height of each rectangle equals the value of the function <code class="docutils literal notranslate"><span class="pre">f</span></code> evaluated at the left endpoint of the rectangle.</p></li>
+</ol>
+<ul class="simple">
+<li><p>Let a vector, say <code class="docutils literal notranslate"><span class="pre">xs</span></code>, store the left endpoints of the rectangles. This vector will consist of the first <code class="docutils literal notranslate"><span class="pre">number_of_rectangles</span></code> elements of <code class="docutils literal notranslate"><span class="pre">xgrid</span></code> above (we need to omit the final element of <code class="docutils literal notranslate"><span class="pre">xgrid</span></code> because no rectangle has it as a left endpoint).</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">xs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class=list-inline><li>0</li><li>2.5</li></ol>
+</div></div>
+</div>
+<p>so in the case of two rectangles, the left endpoints are 0 and 2.5.</p>
+<ul class="simple">
+<li><p>Next, evaluate the heights of the rectangles and store them in a vector, say <code class="docutils literal notranslate"><span class="pre">ys</span></code>. The heights of the rectangles are simply the value of the function <code class="docutils literal notranslate"><span class="pre">f</span></code> evaluated at the left endpoints of the rectangles (i.e. at <code class="docutils literal notranslate"><span class="pre">xs</span></code>)</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">ys</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class=list-inline><li>1</li><li>7.25</li></ol>
+</div></div>
+</div>
+<p>So in the case of two rectangles,</p>
+<ul class="simple">
+<li><p>the height of the first rectangle, <code class="docutils literal notranslate"><span class="pre">ys[1]</span></code>, is 1 (<span class="math notranslate nohighlight">\(f(0)=1\)</span>)</p></li>
+<li><p>the height of the second rectangle, <code class="docutils literal notranslate"><span class="pre">ys[2]</span></code>, is 7.25 (<span class="math notranslate nohighlight">\(f(2.5)=7.25\)</span>)</p></li>
+</ul>
+<p>Finally the sum of the areas of the rectangles is simply</p>
+<div class="math notranslate nohighlight">
+\[
+f(0)\Delta x + f(2.5)\Delta x = (f(0)+f(2.5)) \Delta x
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta x\)</span> is the width of the rectangle.</p>
+<p>In terms of the names of the variables we defined in R this is simply <code class="docutils literal notranslate"><span class="pre">(f(0)+f(2.5))*dx</span></code></p>
+<ul class="simple">
+<li><p>or alternatively <code class="docutils literal notranslate"><span class="pre">(ys[1]+ys[2])*dx</span></code> where <code class="docutils literal notranslate"><span class="pre">ys[i]</span></code> denotes the <code class="docutils literal notranslate"><span class="pre">i</span></code>’th element of the vector <code class="docutils literal notranslate"><span class="pre">ys</span></code></p></li>
+<li><p>or even more conveniently <code class="docutils literal notranslate"><span class="pre">sum(ys)*dx</span></code>  (using the <code class="docutils literal notranslate"><span class="pre">sum()</span></code> function which returns the sum of all elements of a vector). This option is convenient because it works with the same syntax irrespective of the number of rectangles we have.</p></li>
+</ul>
+<p>So the sum of areas of the rectangles, say <code class="docutils literal notranslate"><span class="pre">sum_areas</span></code>, is simply</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sum_areas</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dx</span><span class="o">*</span><span class="nf">sum</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+<span class="n">sum_areas</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">20.625</div></div>
+</div>
+<p>Now for clarity let’s reproduce the whole code we needed for this calculation. Note that it’s not a lot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="n">number_of_rectangles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">2</span>
+<span class="n">xgrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)</span>
+<span class="n">dx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">number_of_rectangles</span>
+<span class="n">xs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">ys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">sum_areas</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dx</span><span class="o">*</span><span class="nf">sum</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+
+<span class="n">sum_areas</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">20.625</div></div>
+</div>
+<p>Note that when we approximate the area with the area of two rectangles only we get 20.625 while the true value of the integral is 46.(6). The large approximation error is not surprising given the graph that we saw before - we are clearly omitting quite a bit of the area under the curve.</p>
+<p>To improve the approximation let’s increase the number of rectangles to 5. Graphically, this would amount to approximating the area under the curve by the sum of areas of the five rectangles below.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="n">number_of_rectangles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+<span class="w">  </span>
+<span class="n">xgrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)</span>
+<span class="n">xs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">ys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">axes</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">at</span><span class="o">=</span><span class="n">xgrid</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">labels</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">las</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
+
+<span class="n">xlefts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">xrights</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="p">(</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)]</span>
+<span class="nf">rect</span><span class="p">(</span><span class="n">xlefts</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">xrights</span><span class="p">,</span><span class="w"> </span><span class="n">ys</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;lightblue&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/6bd551ac51a3021f608b79e24717c90274b5b316a7a1a2082d9198cdc1d23170.png" src="_images/6bd551ac51a3021f608b79e24717c90274b5b316a7a1a2082d9198cdc1d23170.png" />
+</div>
+</div>
+<p>Now in order to calculate this area we can use exactly the same code as bofore but we need to set the number of rectangles to 5.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="n">number_of_rectangles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+<span class="n">xgrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)</span>
+<span class="n">dx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">number_of_rectangles</span>
+<span class="n">xs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">ys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">sum_areas</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dx</span><span class="o">*</span><span class="nf">sum</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+
+<span class="n">sum_areas</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">35</div></div>
+</div>
+<p>As we can see the approximation gets better (now the area is 35 rather than 20.625) but we are still far from the true value of 46.667.</p>
+<p>Note that at this stage it becomes clear that calculating the area of these rectangles by hand will take quite a while, while the R code we use does the calculation in miliseconds.</p>
+<p>Let’s take a big step and use 100 rectangles (if we were to do this by hand it might take weeks, but a computer excels at repetitive tasks).</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="n">number_of_rectangles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100</span>
+<span class="w">  </span>
+<span class="n">xgrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)</span>
+<span class="n">xs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">ys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">axes</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">labels</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">labels</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">las</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
+
+<span class="n">xlefts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">xrights</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="p">(</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)]</span>
+<span class="nf">rect</span><span class="p">(</span><span class="n">xlefts</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">xrights</span><span class="p">,</span><span class="w"> </span><span class="n">ys</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;lightblue&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/9e02106b66132e3f335556d442e522a93a6437d24a00547b75c8ff77d66ccf84.png" src="_images/9e02106b66132e3f335556d442e522a93a6437d24a00547b75c8ff77d66ccf84.png" />
+</div>
+</div>
+<p>Use exactly the same code but set <code class="docutils literal notranslate"><span class="pre">number_of_rectangles</span> <span class="pre">&lt;-</span> <span class="pre">100</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="n">number_of_rectangles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100</span>
+<span class="n">xgrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)</span>
+<span class="n">dx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">number_of_rectangles</span>
+<span class="n">xs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">ys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">sum_areas</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dx</span><span class="o">*</span><span class="nf">sum</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+
+<span class="n">sum_areas</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">46.04375</div></div>
+</div>
+<p>This is much better, with the approximation error less than 1.</p>
+<p>And for 10000 rectangles</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="n">number_of_rectangles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10000</span>
+<span class="w">  </span>
+<span class="n">xgrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)</span>
+<span class="n">xs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">ys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+<span class="nf">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">axes</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">labels</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">axis</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">labels</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">las</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
+
+<span class="n">xlefts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">xrights</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="p">(</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)]</span>
+<span class="nf">rect</span><span class="p">(</span><span class="n">xlefts</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">xrights</span><span class="p">,</span><span class="w"> </span><span class="n">ys</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;lightblue&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/fc5e4db76aa2492c5739db3ccebef6050b14c37d99b40b96946ba21e941f7315.png" src="_images/fc5e4db76aa2492c5739db3ccebef6050b14c37d99b40b96946ba21e941f7315.png" />
+</div>
+</div>
+<p>Set <code class="docutils literal notranslate"><span class="pre">number_of_rectangles</span> <span class="pre">&lt;-</span> <span class="pre">10000</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+
+<span class="n">number_of_rectangles</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10000</span>
+<span class="n">xgrid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">length.out</span><span class="o">=</span><span class="n">number_of_rectangles</span><span class="m">+1</span><span class="p">)</span>
+<span class="n">dx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">number_of_rectangles</span>
+<span class="n">xs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">xgrid</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">number_of_rectangles</span><span class="p">]</span>
+<span class="n">ys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">sum_areas</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dx</span><span class="o">*</span><span class="nf">sum</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+
+<span class="n">sum_areas</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">46.660416875</div></div>
+</div>
+<p>And the numerical error is now only about 0.006.</p>
+<p>This is the idea of numerical integration. There are different methods used to improve the accuracy beyond using more rectangles (e.g. using trapezoids rather than rectangles) but in all cases numerical integration works by approximating area under a curve by sums of areas of rectangles (or trapezoids, etc) and uses further methods to control the approximation error.</p>
+</section>
+<section id="numerical-integration-in-r-using-integrate">
+<span id="section-integrals-integrate"></span><h2><span class="section-number">7.3. </span>Numerical integration in R using <code class="docutils literal notranslate"><span class="pre">integrate()</span></code><a class="headerlink" href="#numerical-integration-in-r-using-integrate" title="Permalink to this heading">#</a></h2>
+<p>I hope that you found the discussion in <a class="reference internal" href="#section-integrals-byhand"><span class="std std-ref">Numerical integration in R from first principles</span></a> interesting and useful and now understand what numerical integration means and how it works, as well as you have an intuition about why it works and why is an approximate method.</p>
+<p>However, in reality we rarely implement numerical integration from first principles and can instead use in-built functions that implement numerical integration efficiently and with high accuracy.</p>
+<p>The bottom line is that such a function in R is the function <code class="docutils literal notranslate"><span class="pre">integrate()</span></code> with usage</p>
+<p><code class="docutils literal notranslate"><span class="pre">integrate(f,a,b)</span></code></p>
+<p>where</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">f</span></code> is the function to be integrated</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> is the lower limit of integration</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> is the upper limit of integration</p></li>
+</ul>
+<p>To use <code class="docutils literal notranslate"><span class="pre">integrate()</span></code> to compute the definite integral from before just set <code class="docutils literal notranslate"><span class="pre">f</span></code>, <code class="docutils literal notranslate"><span class="pre">a</span></code>, and <code class="docutils literal notranslate"><span class="pre">b</span></code>, as before</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">}</span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span>
+<span class="n">b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and call the function</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">integrate</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>46.66667 with absolute error &lt; 5.2e-13
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see it works very quickly, and produces a result with approximation error of the order 0.0000000000005, which is quite precise.</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">integrate()</span></code> function you are able to quickly evaluate definite integrals for any univariate function that you can define through an expression.</p>
+<p>This completes the discussion of <a class="reference internal" href="#chapter-integrals"><span class="std std-ref">Numerical integration in R</span></a> as well as this set of notes on numerical methods. I hope that you have enjoyed it.</p>
+<p>Thank you for reading and all the best!</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ch6Matrices.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Linear algebra in R</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-integration-primer">7.1. Numerical integration - primer</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-numerical-integration">7.1.1. What is numerical integration?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-numerical-integration-work">7.1.2. How does numerical integration work?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-integration-in-r-from-first-principles">7.2. Numerical integration in R from first principles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-integration-in-r-using-integrate">7.3. Numerical integration in R using <code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Emil Kostadinov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

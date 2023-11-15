@@ -1,63 +1,49 @@
 
-
 <!DOCTYPE html>
 
-
-<html lang="en" >
-
+<html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>5. Plotting bivariate functions in R &#8212; Numerical methods for EC140</title>
-  
-  
-  
-  <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
-  </script>
-  
+    <title>4. Plotting bivariate functions in R &#8212; Numerical methods for EC140</title>
+    
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
-  
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
-    <link rel="stylesheet" type="text/css" href="_static/myfile.css" />
-    <link rel="stylesheet" type="text/css" href="_static/.ipynb_checkpoints/myfile-checkpoint.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
-  
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="_static/togglebutton.js"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
@@ -67,102 +53,61 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'ch5R3Dplotting';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="6. Linear algebra in R" href="ch6Matrices.html" />
-    <link rel="prev" title="4. Loops in R" href="ch4Loops.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
+    <link rel="next" title="5. Linear algebra in R" href="ch6Matrices.html" />
+    <link rel="prev" title="3. Writing your own functions in R" href="ch3Functions.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
 
-  
-  
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  
-  <div id="pst-scroll-pixel-helper"></div>
+    
+    <div class="container-fluid" id="banner"></div>
 
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    
 
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
-<form class="bd-search d-flex align-items-center"
-      action="search.html"
-      method="get">
-  <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search"
-         class="form-control"
-         name="q"
-         id="search-input"
-         placeholder="Search this book..."
-         aria-label="Search this book..."
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"/>
-  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
-  
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
-  
-  <div class="bd-container">
-    <div class="bd-container__inner bd-page-width">
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
         
-
-  
-  <div class="sidebar-header-items sidebar-primary__section">
-    
-    
-    
-    
-  </div>
-  
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-  
-
-<a class="navbar-brand logo" href="intro.html">
-  
-  
-  
-  
-    
-    
       
-    
-    
-    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
-  
-  
-</a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item navbar-nav active">
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Numerical methods for EC140</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
@@ -172,228 +117,364 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="ch1Rbasics.html">1. Basics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch2RPlotting.html">2. 2D Plotting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch3Functions.html">3. Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch4Loops.html">4. Loops</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">5. 3D Plotting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch6Matrices.html">6. Matrices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ch7Integrals.html">7. Integrals</a></li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ch1Rbasics.html">
+   1. Basics
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ch2RPlotting.html">
+   2. 2D Plotting
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ch3Functions.html">
+   3. Functions
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   4. 3D Plotting
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ch6Matrices.html">
+   5. Matrices
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ch7Integrals.html">
+   6. Integrals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ch4Loops.html">
+   7. Loops
+  </a>
+ </li>
 </ul>
 
     </div>
 </nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
     </div>
-  
-  
-  <div class="sidebar-primary-items__end sidebar-primary__section">
-  </div>
-  
-  <div id="rtd-footer-container"></div>
+    <div id="rtd-footer-container"></div>
+</div>
 
 
-      </div>
-      
-      <main id="main-content" class="bd-main">
-        
-        
+          
 
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
 <div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
 
-          <div class="bd-content">
-            <div class="bd-article-container">
-              
-              <div class="bd-header-article">
-<div class="header-article-items header-article__inner">
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
   
-    <div class="header-article-items__start">
-      
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <span class="fa-solid fa-bars"></span>
-</label></div>
-      
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
     </div>
-  
-  
-    <div class="header-article-items__end">
-      
-        <div class="header-article-item">
-
-<div class="article-header-buttons">
-
-
-
-
-
-<div class="dropdown dropdown-source-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
-    <i class="fab fa-github"></i>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
   </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="https://github.com/eekostadinov/EC140" target="_blank"
-   class="btn btn-sm btn-source-repository-button dropdown-item"
-   title="Source repository"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="btn__text-container">Repository</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/eekostadinov/EC140/issues/new?title=Issue%20on%20page%20%2Fch5R3Dplotting.html&body=Your%20issue%20content%20here." target="_blank"
-   class="btn btn-sm btn-source-issues-button dropdown-item"
-   title="Open an issue"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="btn__text-container">Open issue</span>
-</a>
-</li>
-      
-  </ul>
-</div>
-
-
-
-
-
-
-<div class="dropdown dropdown-download-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
-    <i class="fas fa-download"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="_sources/ch5R3Dplotting.ipynb" target="_blank"
-   class="btn btn-sm btn-download-source-button dropdown-item"
-   title="Download source file"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="btn__text-container">.ipynb</span>
-</a>
-</li>
-      
-      
-      
-      
+  <div class="menu-dropdown__content">
+    <ul>
       <li>
-<button onclick="window.print()"
-  class="btn btn-sm btn-download-pdf-button dropdown-item"
-  title="Print to PDF"
-  data-bs-placement="left" data-bs-toggle="tooltip"
+        <a href="https://mybinder.org/v2/gh/eekostadinov/EC140/master?urlpath=tree/ch5R3Dplotting.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
 >
   
 
-<span class="btn__icon-container">
-  <i class="fas fa-file-pdf"></i>
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
   </span>
-<span class="btn__text-container">.pdf</span>
-</button>
-</li>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
       
-  </ul>
+    </ul>
+  </div>
 </div>
-
-
-
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
-  title="Fullscreen mode"
-  data-bs-placement="bottom" data-bs-toggle="tooltip"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
 >
   
 
-<span class="btn__icon-container">
+<span class="headerbtn__icon-container">
   <i class="fas fa-expand"></i>
   </span>
 
 </button>
 
-
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
   </button>
-`);
-</script>
-
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
-</div></div>
-      
-    </div>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/eekostadinov/EC140"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
   
-</div>
-</div>
-              
-              
 
-<div id="jb-print-docs-body" class="onlyprint">
-    <h1>Plotting bivariate functions in R</h1>
-    <!-- Table of contents -->
-    <div id="print-main-content">
-        <div id="jb-print-toc">
-            
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-3d-surface-plot-for-a-function-of-two-variables">5.1. Creating a 3D surface plot for a function of two variables.</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1">5.1.1. Step 1</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2">5.1.2. Step 2</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3">5.1.3. Step 3</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-the-look-of-the-surface-plot">5.1.4. Customizing the look of the surface plot</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-contour-plot-for-a-function-of-two-variables">5.2. Creating a contour plot for a function of two variables</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#so-what-does-outer-x-y-f-do">5.3. So what does <code class="docutils literal notranslate"><span class="pre">outer(x,y,f)</span></code> do?</a></li>
-</ul>
-            </nav>
-        </div>
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/eekostadinov/EC140/issues/new?title=Issue%20on%20page%20%2Fch5R3Dplotting.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/ch5R3Dplotting.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
     </div>
 </div>
 
-              
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-3d-surface-plot-for-a-function-of-two-variables">
+   4.1. Creating a 3D surface plot for a function of two variables.
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-1">
+     4.1.1. Step 1
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-2">
+     4.1.2. Step 2
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-3">
+     4.1.3. Step 3
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#customizing-the-look-of-the-surface-plot">
+     4.1.4. Customizing the look of the surface plot
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-contour-plot-for-a-function-of-two-variables">
+   4.2. Creating a contour plot for a function of two variables
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#so-what-does-outer-x-y-f-do">
+   4.3. So what does
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     outer(x,y,f)
+    </span>
+   </code>
+   do?
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Plotting bivariate functions in R</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-3d-surface-plot-for-a-function-of-two-variables">
+   4.1. Creating a 3D surface plot for a function of two variables.
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-1">
+     4.1.1. Step 1
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-2">
+     4.1.2. Step 2
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-3">
+     4.1.3. Step 3
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#customizing-the-look-of-the-surface-plot">
+     4.1.4. Customizing the look of the surface plot
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-contour-plot-for-a-function-of-two-variables">
+   4.2. Creating a contour plot for a function of two variables
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#so-what-does-outer-x-y-f-do">
+   4.3. So what does
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     outer(x,y,f)
+    </span>
+   </code>
+   do?
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
                 
-<div id="searchbox"></div>
-                <article class="bd-article" role="main">
-                  
+              <div>
+                
   <section class="tex2jax_ignore mathjax_ignore" id="plotting-bivariate-functions-in-r">
-<span id="chapter-3dplotting"></span><h1><span class="section-number">5. </span>Plotting bivariate functions in R<a class="headerlink" href="#plotting-bivariate-functions-in-r" title="Permalink to this heading">#</a></h1>
+<span id="chapter-3dplotting"></span><h1><span class="section-number">4. </span>Plotting bivariate functions in R<a class="headerlink" href="#plotting-bivariate-functions-in-r" title="Permalink to this headline">#</a></h1>
 <p>This chapter is a quick guide to plotting 3D surface plots and contour plots for functions of two variables in R. Following the discussion you should be able to plot any simple bivariate function and customise your graph.</p>
 <p>All the examples below only use the core functionality of R (available with any installation through the in-built R <code class="docutils literal notranslate"><span class="pre">graphics</span></code> package) and do not require the installation of additional packages.</p>
 <div class="admonition tip">
@@ -403,14 +484,14 @@ document.write(`
 <p>The best way to work through the chapter is to read the discussion and then reproduce all code in your own R/RStudio installation. You can do this by copying code from a notebook cell to your R script and run the code line by line.</p>
 <p>The chapter includes some exercises that allow you to test your understanding. It is recommended that you try these exercises on your own before choosing the option to reveal the solutions.</p>
 <section id="creating-a-3d-surface-plot-for-a-function-of-two-variables">
-<h2><span class="section-number">5.1. </span>Creating a 3D surface plot for a function of two variables.<a class="headerlink" href="#creating-a-3d-surface-plot-for-a-function-of-two-variables" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">4.1. </span>Creating a 3D surface plot for a function of two variables.<a class="headerlink" href="#creating-a-3d-surface-plot-for-a-function-of-two-variables" title="Permalink to this headline">#</a></h2>
 <p>Conceptually, the procedure for plotting bivariate functions in three dimensions is very similar to the procedure for plotting univariate functions in two dimensions, as discussed in <a class="reference internal" href="ch2RPlotting.html#chapter-plotting"><span class="std std-ref">Plotting in R</span></a>.</p>
 <p>In order to set the stage let’s revisit the procedure for plotting functions of one variable. For example, to plot <span class="math notranslate nohighlight">\(y=x^2-1\)</span> for <span class="math notranslate nohighlight">\(x\in[-2,2]\)</span> we follow the following 3-step procedure:</p>
 <p><strong>Step 1</strong></p>
 <p>Define a vector, <code class="docutils literal notranslate"><span class="pre">x</span></code>, of evenly spaced <span class="math notranslate nohighlight">\(x\)</span> coordinates for <span class="math notranslate nohighlight">\(x\in[-2,2]\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">0.25</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">0.25</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -419,8 +500,8 @@ document.write(`
 <p>Assign the corresponding <span class="math notranslate nohighlight">\(y\)</span> coordinates to <code class="docutils literal notranslate"><span class="pre">y</span></code>. To emphasise the similarity to the procedure for 3D plots, let’s do this by using a function <code class="docutils literal notranslate"><span class="pre">f</span></code> implementing <span class="math notranslate nohighlight">\(f(x)\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="n">x</span><span class="o">^</span><span class="m">2-1</span><span class="p">)}</span>
-<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="n">x</span><span class="o">^</span><span class="m">2-1</span><span class="p">)}</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -434,13 +515,13 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/f7f0778944ea0c7889a736d398736de7bad1a399e0b63935f2104a83d56011a4.png" src="_images/f7f0778944ea0c7889a736d398736de7bad1a399e0b63935f2104a83d56011a4.png" />
+<img alt="_images/ch5R3Dplotting_6_0.png" src="_images/ch5R3Dplotting_6_0.png" />
 </div>
 </div>
 <p>For plotting surface (3D) plots of bivariate functions we follow logically the same 3-step procedure, with small changes of the syntax.</p>
 <p>Suppose that we want to plot the bivariate function <span class="math notranslate nohighlight">\(z=-x^2-y^2\)</span> for <span class="math notranslate nohighlight">\(x\in[-10,10]\)</span> and <span class="math notranslate nohighlight">\(y\in[-10,10]\)</span>.</p>
 <section id="step-1">
-<h3><span class="section-number">5.1.1. </span>Step 1<a class="headerlink" href="#step-1" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">4.1.1. </span>Step 1<a class="headerlink" href="#step-1" title="Permalink to this headline">#</a></h3>
 <p>Define</p>
 <ul class="simple">
 <li><p>a vector <code class="docutils literal notranslate"><span class="pre">x</span></code> of evenly spaced <span class="math notranslate nohighlight">\(x\)</span>-coordinates for <span class="math notranslate nohighlight">\(x\in[-10,10]\)</span> and</p></li>
@@ -448,8 +529,8 @@ document.write(`
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
-<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -457,12 +538,12 @@ document.write(`
 <p>Note that at this step the only difference with respect to <strong>Step 1</strong> for univariate functions, is that now we have two axes for the values of the arguments.</p>
 </section>
 <section id="step-2">
-<h3><span class="section-number">5.1.2. </span>Step 2<a class="headerlink" href="#step-2" title="Permalink to this heading">#</a></h3>
-<p>Assign the corresponding <span class="math notranslate nohighlight">\(z\)</span> coordinates to <code class="docutils literal notranslate"><span class="pre">z</span></code>. As above define a function <code class="docutils literal notranslate"><span class="pre">f</span></code> implementing <span class="math notranslate nohighlight">\(f(x,y)\)</span>. Then create the corresponding <span class="math notranslate nohighlight">\(z\)</span> coordinates by using the code <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">&lt;-</span> <span class="pre">outer(x,y,f)</span></code><a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<h3><span class="section-number">4.1.2. </span>Step 2<a class="headerlink" href="#step-2" title="Permalink to this headline">#</a></h3>
+<p>Assign the corresponding <span class="math notranslate nohighlight">\(z\)</span> coordinates to <code class="docutils literal notranslate"><span class="pre">z</span></code>. As above define a function <code class="docutils literal notranslate"><span class="pre">f</span></code> implementing <span class="math notranslate nohighlight">\(f(x,y)\)</span>. Then create the corresponding <span class="math notranslate nohighlight">\(z\)</span> coordinates by using the code <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">&lt;-</span> <span class="pre">outer(x,y,f)</span></code><a class="footnote-reference brackets" href="#id2" id="id1">1</a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="m">2</span><span class="p">)}</span>
-<span class="n">z</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">);</span><span class="w"> </span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="m">2</span> <span class="o">-</span> <span class="n">y</span><span class="o">^</span><span class="m">2</span><span class="p">)}</span>
+<span class="n">z</span> <span class="o">&lt;-</span> <span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">);</span> 
 </pre></div>
 </div>
 </div>
@@ -470,7 +551,7 @@ document.write(`
 <p>Note that at this step the only difference with respect to <strong>Step 2</strong> for univariate functions is that we assign the <span class="math notranslate nohighlight">\(z\)</span> coordinates by using the <code class="docutils literal notranslate"><span class="pre">outer()</span></code> function rather than through a direct call to <code class="docutils literal notranslate"><span class="pre">f</span></code></p>
 </section>
 <section id="step-3">
-<h3><span class="section-number">5.1.3. </span>Step 3<a class="headerlink" href="#step-3" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">4.1.3. </span>Step 3<a class="headerlink" href="#step-3" title="Permalink to this headline">#</a></h3>
 <p>Plot <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> against <code class="docutils literal notranslate"><span class="pre">z</span></code> using the function <code class="docutils literal notranslate"><span class="pre">persp()</span></code> (for <em>perspective</em>) with usage</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="o">...</span><span class="p">)</span>
 </pre></div>
@@ -478,12 +559,12 @@ document.write(`
 <p>where <code class="docutils literal notranslate"><span class="pre">...</span></code> denotes optional arguments.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b0bc4b992a70defd83bdc581b0d0abb34ad664aa8f2c1fbfdf714da6d5f98745.png" src="_images/b0bc4b992a70defd83bdc581b0d0abb34ad664aa8f2c1fbfdf714da6d5f98745.png" />
+<img alt="_images/ch5R3Dplotting_14_0.png" src="_images/ch5R3Dplotting_14_0.png" />
 </div>
 </div>
 <p>Note that at this step the only difference with respect to <strong>Step 3</strong> for univariate functions is that we use <code class="docutils literal notranslate"><span class="pre">persp()</span></code> rather than <code class="docutils literal notranslate"><span class="pre">plot()</span></code>.</p>
@@ -491,90 +572,90 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set coordinates for the arguments</span>
-<span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
-<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
 <span class="c1"># Assign corresponding z coordinates</span>
-<span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="m">2</span><span class="p">)}</span>
-<span class="n">z</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">);</span><span class="w"> </span>
+<span class="n">f</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="m">2</span> <span class="o">-</span> <span class="n">y</span><span class="o">^</span><span class="m">2</span><span class="p">)}</span>
+<span class="n">z</span> <span class="o">&lt;-</span> <span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">);</span> 
 <span class="c1"># Plot</span>
-<span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">)</span>
+<span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b0bc4b992a70defd83bdc581b0d0abb34ad664aa8f2c1fbfdf714da6d5f98745.png" src="_images/b0bc4b992a70defd83bdc581b0d0abb34ad664aa8f2c1fbfdf714da6d5f98745.png" />
+<img alt="_images/ch5R3Dplotting_17_0.png" src="_images/ch5R3Dplotting_17_0.png" />
 </div>
 </div>
 <p>By adjusting <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> and <code class="docutils literal notranslate"><span class="pre">f</span></code> you can plot the surface of any bivariate function.</p>
 </section>
 <section id="customizing-the-look-of-the-surface-plot">
-<h3><span class="section-number">5.1.4. </span>Customizing the look of the surface plot<a class="headerlink" href="#customizing-the-look-of-the-surface-plot" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">4.1.4. </span>Customizing the look of the surface plot<a class="headerlink" href="#customizing-the-look-of-the-surface-plot" title="Permalink to this headline">#</a></h3>
 <p>As with <code class="docutils literal notranslate"><span class="pre">plot()</span></code>, when using <code class="docutils literal notranslate"><span class="pre">persp()</span></code> we can customize the look of the graph by using optional arguments.</p>
 <p>One important set of optional arguments that are specific to 3D plotting only are ones that allow us to specify the viewing direction - <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. To understand how these work, imagine that you are on a sphere surrounding the graph and can move along the sphere to change your perspective. The argument <code class="docutils literal notranslate"><span class="pre">theta</span></code> allows you to move along “longitudes” of the sphere, while the argument <code class="docutils literal notranslate"><span class="pre">phi</span></code> allows you to move along “latitudes” of the sphere. The values of both <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code> are set in terms of degrees of the angle by which you want to move.</p>
 <p>For example, to move your perspective as a viewer by 30 degrees along the longitude type</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b2635b460d16144a31b3310ed0434bcdfc09099881cab2e356b57eac514ff787.png" src="_images/b2635b460d16144a31b3310ed0434bcdfc09099881cab2e356b57eac514ff787.png" />
+<img alt="_images/ch5R3Dplotting_20_0.png" src="_images/ch5R3Dplotting_20_0.png" />
 </div>
 </div>
 <p>Or to move by 30 degrees along the latitude type</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">phi</span><span class="o">=</span><span class="m">30</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="m">30</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/c815634e68d26be760ce4ae7f3d4c0b879297a55e8ab8c1521ac73267d4587d8.png" src="_images/c815634e68d26be760ce4ae7f3d4c0b879297a55e8ab8c1521ac73267d4587d8.png" />
+<img alt="_images/ch5R3Dplotting_22_0.png" src="_images/ch5R3Dplotting_22_0.png" />
 </div>
 </div>
 <p>Perhaps a better view involves moving along both longitude and latitude?</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">phi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="m">30</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/ce0b9ef96d2144a3f8117392e3fc0557981432ae2223ad128c3bf624d848a0a6.png" src="_images/ce0b9ef96d2144a3f8117392e3fc0557981432ae2223ad128c3bf624d848a0a6.png" />
+<img alt="_images/ch5R3Dplotting_24_0.png" src="_images/ch5R3Dplotting_24_0.png" />
 </div>
 </div>
 <p>We can change the colour of the surface by using <code class="docutils literal notranslate"><span class="pre">col</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">phi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;lightblue&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="m">30</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&quot;lightblue&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/9ed617846fb41ba9f192f3367b0614b63243bb3e5299fd827ed535180cd97ce0.png" src="_images/9ed617846fb41ba9f192f3367b0614b63243bb3e5299fd827ed535180cd97ce0.png" />
+<img alt="_images/ch5R3Dplotting_26_0.png" src="_images/ch5R3Dplotting_26_0.png" />
 </div>
 </div>
 <p>We may want to remove the box?</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">phi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;lightblue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">box</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="m">30</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&quot;lightblue&quot;</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/41a0f18f753d9b1a6396f8da7d98270773c19ceb525840f6c55249a3eba9c299.png" src="_images/41a0f18f753d9b1a6396f8da7d98270773c19ceb525840f6c55249a3eba9c299.png" />
+<img alt="_images/ch5R3Dplotting_28_0.png" src="_images/ch5R3Dplotting_28_0.png" />
 </div>
 </div>
 <p>We may want to have <em>ticks</em> along the axes?</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">phi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;lightblue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ticktype</span><span class="o">=</span><span class="s">&quot;detailed&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="m">30</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="m">30</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s">&quot;lightblue&quot;</span><span class="p">,</span> <span class="n">ticktype</span><span class="o">=</span><span class="s">&quot;detailed&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/ac10e7ccfaf07df1f38cc74bd09b1109e88cbd824c2f3f0be9dde5956f75ca64.png" src="_images/ac10e7ccfaf07df1f38cc74bd09b1109e88cbd824c2f3f0be9dde5956f75ca64.png" />
+<img alt="_images/ch5R3Dplotting_30_0.png" src="_images/ch5R3Dplotting_30_0.png" />
 </div>
 </div>
 <p>And so forth.</p>
@@ -584,7 +665,7 @@ document.write(`
 </div>
 <div class="exercise admonition" id="ex-surf">
 
-<p class="admonition-title"><span class="caption-number">Exercise 5.1 </span></p>
+<p class="admonition-title"><span class="caption-number">Exercise 4.1 </span></p>
 <section id="exercise-content">
 <p>The figure below is a surface plot of <span class="math notranslate nohighlight">\(f(x,y)=x^2-y^2\)</span> for <span class="math notranslate nohighlight">\(x\in[-10,10]\)</span> and <span class="math notranslate nohighlight">\(y\in[-10,10]\)</span>.</p>
 <p>The viewing direction is specified as <code class="docutils literal notranslate"><span class="pre">theta=30,</span> <span class="pre">phi=30</span></code>.</p>
@@ -594,7 +675,7 @@ document.write(`
 </div>
 <div class="solution dropdown admonition" id="ch5R3Dplotting-solution-1">
 
-<p class="admonition-title">Solution to<a class="reference internal" href="#ex-surf"> Exercise 5.1</a></p>
+<p class="admonition-title">Solution to<a class="reference internal" href="#ex-surf"> Exercise 4.1</a></p>
 <section id="solution-content">
 <p>The figure was generated with the following code</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&lt;-</span> <span class="n">seq</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
@@ -609,8 +690,8 @@ document.write(`
 </section>
 </section>
 <section id="creating-a-contour-plot-for-a-function-of-two-variables">
-<h2><span class="section-number">5.2. </span>Creating a contour plot for a function of two variables<a class="headerlink" href="#creating-a-contour-plot-for-a-function-of-two-variables" title="Permalink to this heading">#</a></h2>
-<p>As seen in the lectures, a very useful type of graphical representation of functions of two variables is the contour plot.</p>
+<h2><span class="section-number">4.2. </span>Creating a contour plot for a function of two variables<a class="headerlink" href="#creating-a-contour-plot-for-a-function-of-two-variables" title="Permalink to this headline">#</a></h2>
+<p>As seen in the lectures, a very useful type of graphical representation of functions of two variables is a contour plot displaying the level curves for specific values of the function.</p>
 <p>The good news is that once you are familiar with the procedure of making surface plots, contour plots are straightforward to implement with R.</p>
 <p>For example, consider the function</p>
 <div class="math notranslate nohighlight">
@@ -628,81 +709,81 @@ z=-x^2-y^2
 <p>In order to plot the contour plot for the same function for <span class="math notranslate nohighlight">\(x\in[-10,10]\)</span> and <span class="math notranslate nohighlight">\(y\in[-10,10]\)</span>, we use exactly the same code, except that instead of plotting by calling <code class="docutils literal notranslate"><span class="pre">persp(x,y,z)</span></code> we call <code class="docutils literal notranslate"><span class="pre">contour(x,y,z)</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
-<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
-<span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="m">2</span><span class="p">)}</span>
-<span class="n">z</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">);</span><span class="w"> </span>
-<span class="nf">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-10</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="m">2</span> <span class="o">-</span> <span class="n">y</span><span class="o">^</span><span class="m">2</span><span class="p">)}</span>
+<span class="n">z</span> <span class="o">&lt;-</span> <span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">);</span> 
+<span class="nf">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/84c9fc74b84c527c7f615d13d59ef8330ddf0c347a86d97773e37c60bfc28d50.png" src="_images/84c9fc74b84c527c7f615d13d59ef8330ddf0c347a86d97773e37c60bfc28d50.png" />
+<img alt="_images/ch5R3Dplotting_36_0.png" src="_images/ch5R3Dplotting_36_0.png" />
 </div>
 </div>
 <p>The plot can be customized by using optional arguments. For example, to change the color of the contours</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/14de34faa1dc5874796388e673ced5808a882ebd0287ca73e770ade24c87cbde.png" src="_images/14de34faa1dc5874796388e673ced5808a882ebd0287ca73e770ade24c87cbde.png" />
+<img alt="_images/ch5R3Dplotting_38_0.png" src="_images/ch5R3Dplotting_38_0.png" />
 </div>
 </div>
 <p>To make the contour lines thicker</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2988ff61bdb386c91c3f5102a265dfc260682de2ff8a3c77feb024e1af327d5b.png" src="_images/2988ff61bdb386c91c3f5102a265dfc260682de2ff8a3c77feb024e1af327d5b.png" />
+<img alt="_images/ch5R3Dplotting_40_0.png" src="_images/ch5R3Dplotting_40_0.png" />
 </div>
 </div>
 <p>To change the number of contours plotted</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">nlevels</span><span class="o">=</span><span class="m">4</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">nlevels</span><span class="o">=</span><span class="m">4</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/036d898799f5eda62bf64367bdddb45d5fca4a0182374eb468cd24164e3d2086.png" src="_images/036d898799f5eda62bf64367bdddb45d5fca4a0182374eb468cd24164e3d2086.png" />
+<img alt="_images/ch5R3Dplotting_42_0.png" src="_images/ch5R3Dplotting_42_0.png" />
 </div>
 </div>
 <p>We can also plot a contour plot with the areas between the contours filled in solid color, instead of <code class="docutils literal notranslate"><span class="pre">contour()</span></code> use the function <code class="docutils literal notranslate"><span class="pre">filled.contour()</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">filled.contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">filled.contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/744a3de100cbc8a4fef512cd0e674ec0f9baf281936fbebfe01eaa0af05b7312.png" src="_images/744a3de100cbc8a4fef512cd0e674ec0f9baf281936fbebfe01eaa0af05b7312.png" />
+<img alt="_images/ch5R3Dplotting_44_0.png" src="_images/ch5R3Dplotting_44_0.png" />
 </div>
 </div>
 <p>An interesting (if a bit indulgent) feature is that with filled contours we can use color palettes (note that by default we have a lot of colors in such a plot so it is no longer sufficient to define the color, but the whole “color palette”). R has a number of in-built palettes which can be called as below (if you are interested check online how to do this).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">filled.contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">cm.colors</span><span class="p">(</span><span class="m">20</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">filled.contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="nf">cm.colors</span><span class="p">(</span><span class="m">20</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/45561ee5d754059c3746d470ee6792de715f66ce1c5e5a37d53f461e0b5d6a4b.png" src="_images/45561ee5d754059c3746d470ee6792de715f66ce1c5e5a37d53f461e0b5d6a4b.png" />
+<img alt="_images/ch5R3Dplotting_46_0.png" src="_images/ch5R3Dplotting_46_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">filled.contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">rainbow</span><span class="p">(</span><span class="m">20</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">filled.contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="nf">rainbow</span><span class="p">(</span><span class="m">20</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/a3e09423cf326091309eaaedc147f07d691e5242050af4f335a032b56166746f.png" src="_images/a3e09423cf326091309eaaedc147f07d691e5242050af4f335a032b56166746f.png" />
+<img alt="_images/ch5R3Dplotting_47_0.png" src="_images/ch5R3Dplotting_47_0.png" />
 </div>
 </div>
 <p>We can even use palettes with colors from Wes Anderson movies (if you haven’t watched any I highly recommend them) but they come with an additional package that needs to be installed.</p>
@@ -713,18 +794,18 @@ z=-x^2-y^2
 <p>And here is a filled contour with colors from the Wes Anderson’s “Grand Budapest Hotel”</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">filled.contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">wes_palette</span><span class="p">(</span><span class="s">&quot;GrandBudapest2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;continuous&quot;</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">filled.contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="nf">wes_palette</span><span class="p">(</span><span class="s">&quot;GrandBudapest2&quot;</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="m">20</span><span class="p">,</span> <span class="n">type</span><span class="o">=</span><span class="s">&quot;continuous&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2855e8dc9e9138d654e598c3681cd25e715df64a5283e8b9f8a6894439066efd.png" src="_images/2855e8dc9e9138d654e598c3681cd25e715df64a5283e8b9f8a6894439066efd.png" />
+<img alt="_images/ch5R3Dplotting_51_0.png" src="_images/ch5R3Dplotting_51_0.png" />
 </div>
 </div>
 <p>Anyhow, this is not so important. The important point is that it is very easy to make contour plots in R.</p>
 <div class="exercise admonition" id="ex-cont">
 
-<p class="admonition-title"><span class="caption-number">Exercise 5.2 </span></p>
+<p class="admonition-title"><span class="caption-number">Exercise 4.2 </span></p>
 <section id="exercise-content">
 <p>Consider the utility function <span class="math notranslate nohighlight">\(u(x,y)=x^{1/3}y^{2/3}\)</span>.</p>
 <p>Produce a simple graph of indifference curves from this utility function for <span class="math notranslate nohighlight">\(x\in[0,3]\)</span> and <span class="math notranslate nohighlight">\(y\in[0,3]\)</span></p>
@@ -732,7 +813,7 @@ z=-x^2-y^2
 </div>
 <div class="solution dropdown admonition" id="ch5R3Dplotting-solution-3">
 
-<p class="admonition-title">Solution to<a class="reference internal" href="#ex-cont"> Exercise 5.2</a></p>
+<p class="admonition-title">Solution to<a class="reference internal" href="#ex-cont"> Exercise 4.2</a></p>
 <section id="solution-content">
 <p>A graph of indifference curves (indifference map) is nothing else but a contour plot of a utility function. Hence the code below produces such indifference map</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&lt;-</span> <span class="n">seq</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
@@ -747,20 +828,20 @@ z=-x^2-y^2
 </div>
 </section>
 <section id="so-what-does-outer-x-y-f-do">
-<h2><span class="section-number">5.3. </span>So what does <code class="docutils literal notranslate"><span class="pre">outer(x,y,f)</span></code> do?<a class="headerlink" href="#so-what-does-outer-x-y-f-do" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">4.3. </span>So what does <code class="docutils literal notranslate"><span class="pre">outer(x,y,f)</span></code> do?<a class="headerlink" href="#so-what-does-outer-x-y-f-do" title="Permalink to this headline">#</a></h2>
 <p>As seen above, a key step in producing plots of a bivariate functions is defining appropriate set of <span class="math notranslate nohighlight">\(z\)</span> coordinates corresponding to the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> coordinates. Further, whether we produce surface plots or contour plots, given vectors of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> coordinates and a specification of the function to be plotted <span class="math notranslate nohighlight">\(f\)</span>, these coordinates are defined consistently by the statement <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">&lt;-</span> <span class="pre">outer(x,y,f)</span></code>. In this section we turn attention to the <code class="docutils literal notranslate"><span class="pre">outer()</span></code> function and to understanding exactly what it does.</p>
 <p>To set the stage, consider first a plot of a univariate function in two dimensions. For example</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">0.25</span><span class="p">)</span>
-<span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="n">x</span><span class="o">^</span><span class="m">2-1</span><span class="p">)}</span>
-<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">0.25</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="n">x</span><span class="o">^</span><span class="m">2-1</span><span class="p">)}</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">type</span><span class="o">=</span><span class="s">&quot;l&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/f7f0778944ea0c7889a736d398736de7bad1a399e0b63935f2104a83d56011a4.png" src="_images/f7f0778944ea0c7889a736d398736de7bad1a399e0b63935f2104a83d56011a4.png" />
+<img alt="_images/ch5R3Dplotting_57_0.png" src="_images/ch5R3Dplotting_57_0.png" />
 </div>
 </div>
 <p>Notice that in the case of a bivariate function both the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> coordinates are specified as vectors of the same number of elements</p>
@@ -817,21 +898,21 @@ z=-x^2-y^2
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set coordinates for the arguments</span>
-<span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-5</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
-<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">-5</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-5</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">-5</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="m">1</span><span class="p">)</span>
 <span class="c1"># Assign corresponding z coordinates</span>
-<span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="m">2</span><span class="p">)}</span>
-<span class="n">z</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">);</span><span class="w"> </span>
+<span class="n">f</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">){</span><span class="nf">return</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="m">2</span> <span class="o">-</span> <span class="n">y</span><span class="o">^</span><span class="m">2</span><span class="p">)}</span>
+<span class="n">z</span> <span class="o">&lt;-</span> <span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">);</span> 
 <span class="c1"># Plot</span>
-<span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">)</span>
+<span class="nf">persp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/727ff9ee255334fc14f43ecdecd1a395addeae76785bf33a46b652efaca35a07.png" src="_images/727ff9ee255334fc14f43ecdecd1a395addeae76785bf33a46b652efaca35a07.png" />
+<img alt="_images/ch5R3Dplotting_65_0.png" src="_images/ch5R3Dplotting_65_0.png" />
 </div>
 </div>
-<p>The vectors <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> have 21 elements each.</p>
+<p>The vectors <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> have 11 elements each.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span>
@@ -883,7 +964,7 @@ z=-x^2-y^2
 <p>So an appropriate set of <span class="math notranslate nohighlight">\(z\)</span> coordinates will include one <span class="math notranslate nohighlight">\(z\)</span> coordinate for each combination of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. Since there are 11 values for <span class="math notranslate nohighlight">\(x\)</span> and 11 values for <span class="math notranslate nohighlight">\(y\)</span>, we need to have <span class="math notranslate nohighlight">\(11\times 11=121\)</span> <span class="math notranslate nohighlight">\(z\)</span> coordinates. Further, these coordinates need to be specified in a consistent way so that R knows which of the 121 <span class="math notranslate nohighlight">\(z\)</span> coordinates corresponds to which combination of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>. This is exactly what <code class="docutils literal notranslate"><span class="pre">outer(x,y,f)</span></code> does.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">z</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">&lt;-</span> <span class="nf">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
 <span class="n">z</span>
 </pre></div>
 </div>
@@ -911,10 +992,11 @@ z=-x^2-y^2
 <p>Hence, based on this orderly specification of <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span> coordinates, R knows exactly what value of <span class="math notranslate nohighlight">\(z\)</span> corresponds to each pair of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, and is able to plot.</p>
 <p>This completes the discussion of <a class="reference internal" href="#chapter-3dplotting"><span class="std std-ref">Plotting bivariate functions in R</span></a>. We next turn attention to using R for working with matrices.</p>
 <hr class="footnotes docutils" />
-<aside class="footnote brackets" id="id2" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>At this stage don’t worry about what the <code class="docutils literal notranslate"><span class="pre">outer()</span></code> function does - we will look at this soon. For now just keep in mind that this is always the correct piece of code needed to generate corresponding <code class="docutils literal notranslate"><span class="pre">z</span></code> coordinates from vectors <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> and a function <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p>
-</aside>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>At this stage don’t worry about what the <code class="docutils literal notranslate"><span class="pre">outer()</span></code> function does - we will look at this soon. For now just keep in mind that this is always the correct piece of code needed to generate corresponding <code class="docutils literal notranslate"><span class="pre">z</span></code> coordinates from vectors <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> and a function <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p>
+</dd>
+</dl>
 </section>
 </section>
 
@@ -930,7 +1012,7 @@ z=-x^2-y^2
             mode: "r"
         },
         kernelOptions: {
-            name: "ir",
+            kernelName: "ir",
             path: "./."
         },
         predefinedOutput: true
@@ -938,109 +1020,50 @@ z=-x^2-y^2
     </script>
     <script>kernelName = 'ir'</script>
 
-                </article>
+              </div>
               
-
-              
-              
-              
-              
-                <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
-<div class="prev-next-area">
-    <a class="left-prev"
-       href="ch4Loops.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">4. </span>Loops in R</p>
-      </div>
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ch3Functions.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">3. </span>Writing your own functions in R</p>
+        </div>
     </a>
-    <a class="right-next"
-       href="ch6Matrices.html"
-       title="next page">
-      <div class="prev-next-info">
+    <a class='right-next' id="next-link" href="ch6Matrices.html" title="next page">
+    <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">6. </span>Linear algebra in R</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
+        <p class="prev-next-title"><span class="section-number">5. </span>Linear algebra in R</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
-                </footer>
-              
-            </div>
-            
-            
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-3d-surface-plot-for-a-function-of-two-variables">5.1. Creating a 3D surface plot for a function of two variables.</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1">5.1.1. Step 1</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2">5.1.2. Step 2</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3">5.1.3. Step 3</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-the-look-of-the-surface-plot">5.1.4. Customizing the look of the surface plot</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-contour-plot-for-a-function-of-two-variables">5.2. Creating a contour plot for a function of two variables</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#so-what-does-outer-x-y-f-do">5.3. So what does <code class="docutils literal notranslate"><span class="pre">outer(x,y,f)</span></code> do?</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
-              
-            
-          </div>
-          <footer class="bd-footer-content">
-            
-<div class="bd-footer-content__inner container">
-  
-  <div class="footer-item">
-    
-<p class="component-author">
-By Emil Kostadinov
-</p>
-
-  </div>
-  
-  <div class="footer-item">
-    
-  <p class="copyright">
-    
-      © Copyright 2022.
-      <br/>
-    
-  </p>
-
-  </div>
-  
-  <div class="footer-item">
-    
-  </div>
-  
-  <div class="footer-item">
-    
-  </div>
-  
-</div>
-          </footer>
-        
-
-      </main>
+            </footer>
+        </div>
     </div>
-  </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Department of Economics, University of Warwick<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 
-  <footer class="bd-footer">
-  </footer>
+
   </body>
 </html>

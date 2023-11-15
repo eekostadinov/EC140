@@ -9,11 +9,11 @@ chapters:
   title: 2D Plotting
 - file: ch3Functions
   title: Functions
-- file: ch4Loops
-  title: Loops
 - file: ch5R3Dplotting
   title: 3D Plotting
 - file: ch6Matrices
   title: Matrices
 - file: ch7Integrals
   title: Integrals
+- file: ch4Loops
+  title: Loops

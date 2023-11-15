@@ -2,7 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: Numerical methods for EC140
-author: Emil Kostadinov
+author: Department of Economics, University of Warwick
 logo: logo.png
 
 # Force re-execution of notebooks on each build.
